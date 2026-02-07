@@ -1,0 +1,426 @@
+{
+  "items": [
+    {
+      "item_key": "backpack-45l",
+      "clean_query": "45\u202fL Backpack 45L capacity adjustable suspension integrated rain cover",
+      "expanded_query": "45\u202fL Backpack 45L capacity adjustable suspension integrated rain cover 45L hiking backpack frame pack",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "45L capacity",
+          "adjustable suspension",
+          "integrated rain cover"
+        ]
+      }
+    },
+    {
+      "item_key": "sleeping-bag-0c",
+      "clean_query": "0\u202f\u00b0C Rated Sleeping Bag temperature rating 0C synthetic insulation mummy shape",
+      "expanded_query": "0\u202f\u00b0C Rated Sleeping Bag temperature rating 0C synthetic insulation mummy shape 0C sleeping bag cold weather bag",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "temperature rating 0C",
+          "synthetic insulation",
+          "mummy shape"
+        ]
+      }
+    },
+    {
+      "item_key": "insulated-sleeping-pad",
+      "clean_query": "Insulated Sleeping Pad R-value 4.5 foldable lightweight",
+      "expanded_query": "Insulated Sleeping Pad R-value 4.5 foldable lightweight insulated sleeping pad R-value 4.5",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "R-value 4.5",
+          "foldable",
+          "lightweight"
+        ]
+      }
+    },
+    {
+      "item_key": "three-season-tent",
+      "clean_query": "Three\u2011Season Tent 2-person double wall season rating 3",
+      "expanded_query": "Three\u2011Season Tent 2-person double wall season rating 3 3-season backpacking tent 2-person tent",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "2-person",
+          "double wall",
+          "season rating 3"
+        ]
+      }
+    },
+    {
+      "item_key": "canister-stove",
+      "clean_query": "Canister Stove isobutane-propane boil time <4min integrated windscreen",
+      "expanded_query": "Canister Stove isobutane-propane boil time <4min integrated windscreen canister backpacking stove isobutane stove",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "isobutane-propane",
+          "boil time <4min",
+          "integrated windscreen"
+        ]
+      }
+    },
+    {
+      "item_key": "cookware-set",
+      "clean_query": "Cookware Set 1\u2011liter pot non\u2011stick coating titanium spork",
+      "expanded_query": "Cookware Set 1\u2011liter pot non\u2011stick coating titanium spork backpacking cookware set lightweight pot",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "1\u2011liter pot",
+          "non\u2011stick coating",
+          "titanium spork"
+        ]
+      }
+    },
+    {
+      "item_key": "water-filter-pump",
+      "clean_query": "Pump Water Filter 0.2\u202f\u00b5m pore size flow rate 1\u202fL/min compatible with standard bottles",
+      "expanded_query": "Pump Water Filter 0.2\u202f\u00b5m pore size flow rate 1\u202fL/min compatible with standard bottles pump water filter backpacking 0.2 micron filter",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "0.2\u202f\u00b5m pore size",
+          "flow rate 1\u202fL/min",
+          "compatible with standard bottles"
+        ]
+      }
+    },
+    {
+      "item_key": "headlamp-led",
+      "clean_query": "LED Headlamp 200 lumens red night mode AAA batteries",
+      "expanded_query": "LED Headlamp 200 lumens red night mode AAA batteries LED headlamp backpacking red mode headlamp",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "200 lumens",
+          "red night mode",
+          "AAA batteries"
+        ]
+      }
+    },
+    {
+      "item_key": "first-aid-kit-mini",
+      "clean_query": "Mini First\u2011Aid Kit compact size includes blister pads NSAID tablets",
+      "expanded_query": "Mini First\u2011Aid Kit compact size includes blister pads NSAID tablets backpacking first aid kit mini medical kit",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "compact size",
+          "includes blister pads",
+          "NSAID tablets"
+        ]
+      }
+    },
+    {
+      "item_key": "map-compass-set",
+      "clean_query": "Topographic Map & Compass topographic detail baseplate compass",
+      "expanded_query": "Topographic Map & Compass topographic detail baseplate compass topographic map backpacking compass",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "topographic detail",
+          "baseplate compass"
+        ]
+      }
+    },
+    {
+      "item_key": "bear-resistant-canister",
+      "clean_query": "Bear\u2011Resistant Food Canister certified USFS capacity 5\u202fL",
+      "expanded_query": "Bear\u2011Resistant Food Canister certified USFS capacity 5\u202fL bear resistant canister food storage bear proof",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "certified USFS",
+          "capacity 5\u202fL"
+        ]
+      }
+    },
+    {
+      "item_key": "trekking-poles-carbon",
+      "clean_query": "Carbon Trekking Poles carbon fiber adjustable 110\u2011130\u202fcm shock absorbers",
+      "expanded_query": "Carbon Trekking Poles carbon fiber adjustable 110\u2011130\u202fcm shock absorbers carbon trekking poles adjustable hiking poles",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "carbon fiber",
+          "adjustable 110\u2011130\u202fcm",
+          "shock absorbers"
+        ]
+      }
+    },
+    {
+      "item_key": "solar-charger-10w",
+      "clean_query": "10\u202fW Portable Solar Charger 10W output USB-C and USB-A foldable design",
+      "expanded_query": "10\u202fW Portable Solar Charger 10W output USB-C and USB-A foldable design portable solar charger backpacking 10W solar panel",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "10W output",
+          "USB-C and USB-A",
+          "foldable design"
+        ]
+      }
+    },
+    {
+      "item_key": "down-jacket-lightweight",
+      "clean_query": "Lightweight Down Jacket 800 fill power compressible water\u2011resistant shell",
+      "expanded_query": "Lightweight Down Jacket 800 fill power compressible water\u2011resistant shell lightweight down jacket 800 fill power",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "800 fill power",
+          "compressible",
+          "water\u2011resistant shell"
+        ]
+      }
+    },
+    {
+      "item_key": "camp-chair-aluminum",
+      "clean_query": "Aluminum Camp Chair aluminum frame weight <2\u202fkg quick\u2011fold",
+      "expanded_query": "Aluminum Camp Chair aluminum frame weight <2\u202fkg quick\u2011fold folding camp chair lightweight camping chair",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "aluminum frame",
+          "weight <2\u202fkg",
+          "quick\u2011fold"
+        ]
+      }
+    },
+    {
+      "item_key": "synthetic-sleeping-bag-5c",
+      "clean_query": "Synthetic Sleeping Bag (5\u202f\u00b0C) temperature rating 5C synthetic fill mummy shape",
+      "expanded_query": "Synthetic Sleeping Bag (5\u202f\u00b0C) temperature rating 5C synthetic fill mummy shape 5C synthetic sleeping bag budget cold weather bag",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "temperature rating 5C",
+          "synthetic fill",
+          "mummy shape"
+        ]
+      }
+    },
+    {
+      "item_key": "single-wall-tent-2p",
+      "clean_query": "2\u2011Person Single\u2011Wall Tent 2-person single wall waterproof rating 2000mm",
+      "expanded_query": "2\u2011Person Single\u2011Wall Tent 2-person single wall waterproof rating 2000mm budget 2-person tent single wall backpacking tent",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "2-person",
+          "single wall",
+          "waterproof rating 2000mm"
+        ]
+      }
+    },
+    {
+      "item_key": "alcohol-stove-mini",
+      "clean_query": "Mini Alcohol Stove alcohol fuel weight <100\u202fg simple design",
+      "expanded_query": "Mini Alcohol Stove alcohol fuel weight <100\u202fg simple design alcohol backpacking stove mini fuel stove",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "alcohol fuel",
+          "weight <100\u202fg",
+          "simple design"
+        ]
+      }
+    },
+    {
+      "item_key": "budget-backpack-40l",
+      "clean_query": "40\u202fL Budget Backpack 40L capacity internal frame integrated rain cover",
+      "expanded_query": "40\u202fL Budget Backpack 40L capacity internal frame integrated rain cover budget hiking backpack 40L affordable frame pack",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "40L capacity",
+          "internal frame",
+          "integrated rain cover"
+        ]
+      }
+    },
+    {
+      "item_key": "toothbrush-toothpaste",
+      "clean_query": "Toothbrush & Toothpaste compact toothbrush travel toothpaste tube",
+      "expanded_query": "Toothbrush & Toothpaste compact toothbrush travel toothpaste tube travel toothbrush mini toothpaste",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "compact toothbrush",
+          "travel toothpaste tube"
+        ]
+      }
+    },
+    {
+      "item_key": "lip-balm-spf15",
+      "clean_query": "SPF Lip Balm SPF 15 hydrating",
+      "expanded_query": "SPF Lip Balm SPF 15 hydrating lip balm SPF winter lip balm",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "SPF 15",
+          "hydrating"
+        ]
+      }
+    },
+    {
+      "item_key": "broad-spectrum-sunscreen",
+      "clean_query": "Broad\u2011Spectrum Sunscreen SPF 30 water resistant",
+      "expanded_query": "Broad\u2011Spectrum Sunscreen SPF 30 water resistant broad spectrum sunscreen SPF 30 lotion",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "SPF 30",
+          "water resistant"
+        ]
+      }
+    },
+    {
+      "item_key": "compact-multi-tool",
+      "clean_query": "Compact Multi\u2011Tool 5\u2011in\u20111 blade lock",
+      "expanded_query": "Compact Multi\u2011Tool 5\u2011in\u20111 blade lock compact multi tool backpacking multi tool",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "5\u2011in\u20111",
+          "blade lock"
+        ]
+      }
+    },
+    {
+      "item_key": "mini-duct-tape",
+      "clean_query": "Mini Duct Tape Roll 5\u202fm length waterproof",
+      "expanded_query": "Mini Duct Tape Roll 5\u202fm length waterproof mini duct tape repair tape",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "5\u202fm length",
+          "waterproof"
+        ]
+      }
+    },
+    {
+      "item_key": "pack-rain-cover",
+      "clean_query": "Pack Rain Cover 3000\u202fmm rating adjustable size",
+      "expanded_query": "Pack Rain Cover 3000\u202fmm rating adjustable size backpack rain cover waterproof pack cover",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "3000\u202fmm rating",
+          "adjustable size"
+        ]
+      }
+    },
+    {
+      "item_key": "wool-socks-2pairs",
+      "clean_query": "Wool Hiking Socks (2\u202fPairs) merino wool 2 pairs",
+      "expanded_query": "Wool Hiking Socks (2\u202fPairs) merino wool 2 pairs merino hiking socks cold weather socks",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "merino wool",
+          "2 pairs"
+        ]
+      }
+    },
+    {
+      "item_key": "heavy-duty-trash-bags",
+      "clean_query": "Heavy\u2011Duty Trash Bags 30\u202fL size zip\u2011lock closure",
+      "expanded_query": "Heavy\u2011Duty Trash Bags 30\u202fL size zip\u2011lock closure heavy duty trash bags ziplock trash bags",
+      "strict_match_fingerprint": {
+        "brand": null,
+        "mpn": null,
+        "model": null,
+        "upc": null,
+        "must_have_tokens": [
+          "30\u202fL size",
+          "zip\u2011lock closure"
+        ]
+      }
+    }
+  ]
+}

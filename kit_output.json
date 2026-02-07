@@ -1,0 +1,700 @@
+{
+  "kit_title": "Cold-Weather Solo Backpacking Gear Kit (3-Day)",
+  "summary": "A comprehensive gear list for a solo 3\u2011day backpacking trip in cold conditions, staying within a $1200 budget. Includes essential equipment, safety gear, optional upgrades, budget-friendly alternatives, and often\u2011overlooked items.",
+  "sections": [
+    {
+      "name": "Essential Items",
+      "items": [
+        {
+          "item_key": "backpack-45l",
+          "name": "45\u202fL Backpack",
+          "description": "Durable frame pack with padded hip belt and rain cover.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "45L capacity",
+            "adjustable suspension",
+            "integrated rain cover"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "45L hiking backpack",
+            "frame pack"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "sleeping-bag-0c",
+          "name": "0\u202f\u00b0C Rated Sleeping Bag",
+          "description": "Synthetic insulated bag rated for 0\u202f\u00b0C, suitable for cold nights.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "temperature rating 0C",
+            "synthetic insulation",
+            "mummy shape"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Ensure bag is fully zipped to retain heat"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "0C sleeping bag",
+            "cold weather bag"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "insulated-sleeping-pad",
+          "name": "Insulated Sleeping Pad",
+          "description": "Closed\u2011cell foam pad with reflective layer for added warmth.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "R-value 4.5",
+            "foldable",
+            "lightweight"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "insulated sleeping pad",
+            "R-value 4.5"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "three-season-tent",
+          "name": "Three\u2011Season Tent",
+          "description": "Freestanding 2\u2011person tent with double walls and vestibule.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "2-person",
+            "double wall",
+            "season rating 3"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Stake securely in windy conditions"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "3-season backpacking tent",
+            "2-person tent"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "canister-stove",
+          "name": "Canister Stove",
+          "description": "Compact fuel\u2011canister stove with windscreen.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "isobutane-propane",
+            "boil time <4min",
+            "integrated windscreen"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Use in well\u2011ventilated area",
+            "Follow stove certification guidelines"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "canister backpacking stove",
+            "isobutane stove"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "cookware-set",
+          "name": "Cookware Set",
+          "description": "Lightweight pot, lid, and spork set for meals.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "1\u2011liter pot",
+            "non\u2011stick coating",
+            "titanium spork"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "backpacking cookware set",
+            "lightweight pot"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "water-filter-pump",
+          "name": "Pump Water Filter",
+          "description": "Portable pump filter removing 99.9% of bacteria and protozoa.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "0.2\u202f\u00b5m pore size",
+            "flow rate 1\u202fL/min",
+            "compatible with standard bottles"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Sanitize filter after use"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "pump water filter backpacking",
+            "0.2 micron filter"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Safety / PPE",
+      "items": [
+        {
+          "item_key": "headlamp-led",
+          "name": "LED Headlamp",
+          "description": "Hands\u2011free headlamp with adjustable brightness and red mode.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "200 lumens",
+            "red night mode",
+            "AAA batteries"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Carry spare batteries"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "LED headlamp backpacking",
+            "red mode headlamp"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "first-aid-kit-mini",
+          "name": "Mini First\u2011Aid Kit",
+          "description": "Compact kit with bandages, antiseptic wipes, blister treatment, and pain relievers.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "compact size",
+            "includes blister pads",
+            "NSAID tablets"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Check expiration dates before departure"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "backpacking first aid kit",
+            "mini medical kit"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "map-compass-set",
+          "name": "Topographic Map & Compass",
+          "description": "Paper topographic map of the area and a baseplate compass.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "topographic detail",
+            "baseplate compass"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Practice navigation before the trip"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "topographic map",
+            "backpacking compass"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "bear-resistant-canister",
+          "name": "Bear\u2011Resistant Food Canister",
+          "description": "Hard\u2011shell canister meeting regional bear\u2011proof standards.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "certified USFS",
+            "capacity 5\u202fL"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "essential",
+          "safety_notes": [
+            "Store food away from sleeping area"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "bear resistant canister",
+            "food storage bear proof"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Optional Upgrades",
+      "items": [
+        {
+          "item_key": "trekking-poles-carbon",
+          "name": "Carbon Trekking Poles",
+          "description": "Adjustable lightweight poles with ergonomic grips.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "carbon fiber",
+            "adjustable 110\u2011130\u202fcm",
+            "shock absorbers"
+          ],
+          "quantity_suggestion": "1 pair",
+          "priority": "optional",
+          "safety_notes": [
+            "Lock sections securely before use"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "carbon trekking poles",
+            "adjustable hiking poles"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "solar-charger-10w",
+          "name": "10\u202fW Portable Solar Charger",
+          "description": "Foldable panel with USB output for recharging devices.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "10W output",
+            "USB-C and USB-A",
+            "foldable design"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [
+            "Charge in direct sunlight, avoid water exposure"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "portable solar charger backpacking",
+            "10W solar panel"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "down-jacket-lightweight",
+          "name": "Lightweight Down Jacket",
+          "description": "Packable down jacket with high fill power for extra warmth.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "800 fill power",
+            "compressible",
+            "water\u2011resistant shell"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "lightweight down jacket",
+            "800 fill power"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "camp-chair-aluminum",
+          "name": "Aluminum Camp Chair",
+          "description": "Compact folding chair for campsite comfort.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "aluminum frame",
+            "weight <2\u202fkg",
+            "quick\u2011fold"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "folding camp chair",
+            "lightweight camping chair"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Budget-Friendly Alternatives",
+      "items": [
+        {
+          "item_key": "synthetic-sleeping-bag-5c",
+          "name": "Synthetic Sleeping Bag (5\u202f\u00b0C)",
+          "description": "Affordable synthetic bag rated for 5\u202f\u00b0C, suitable for moderate cold.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "temperature rating 5C",
+            "synthetic fill",
+            "mummy shape"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "recommended",
+          "safety_notes": [
+            "Add a liner for extra warmth if needed"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "5C synthetic sleeping bag",
+            "budget cold weather bag"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "single-wall-tent-2p",
+          "name": "2\u2011Person Single\u2011Wall Tent",
+          "description": "Simpler design tent at lower cost, still weather\u2011resistant.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "2-person",
+            "single wall",
+            "waterproof rating 2000mm"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "recommended",
+          "safety_notes": [
+            "Use footprint to protect floor"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "budget 2-person tent",
+            "single wall backpacking tent"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "alcohol-stove-mini",
+          "name": "Mini Alcohol Stove",
+          "description": "Ultra\u2011light stove using denatured alcohol, very low cost.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "alcohol fuel",
+            "weight <100\u202fg",
+            "simple design"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "recommended",
+          "safety_notes": [
+            "Use only in well\u2011ventilated area; keep fuel away from fire"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "alcohol backpacking stove",
+            "mini fuel stove"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "budget-backpack-40l",
+          "name": "40\u202fL Budget Backpack",
+          "description": "Cost\u2011effective pack with basic frame and rain cover.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "40L capacity",
+            "internal frame",
+            "integrated rain cover"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "recommended",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "budget hiking backpack 40L",
+            "affordable frame pack"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Frequently Forgotten Items",
+      "items": [
+        {
+          "item_key": "toothbrush-toothpaste",
+          "name": "Toothbrush & Toothpaste",
+          "description": "Travel\u2011size oral hygiene set.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "compact toothbrush",
+            "travel toothpaste tube"
+          ],
+          "quantity_suggestion": "1 set",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "travel toothbrush",
+            "mini toothpaste"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "lip-balm-spf15",
+          "name": "SPF Lip Balm",
+          "description": "Protects lips from wind and UV exposure.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "SPF 15",
+            "hydrating"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "lip balm SPF",
+            "winter lip balm"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "broad-spectrum-sunscreen",
+          "name": "Broad\u2011Spectrum Sunscreen",
+          "description": "SPF 30, water\u2011resistant lotion for sun protection.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "SPF 30",
+            "water resistant"
+          ],
+          "quantity_suggestion": "1 tube",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "broad spectrum sunscreen",
+            "SPF 30 lotion"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "compact-multi-tool",
+          "name": "Compact Multi\u2011Tool",
+          "description": "Includes knife, pliers, screwdriver, and bottle opener.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "5\u2011in\u20111",
+            "blade lock"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [
+            "Keep blade sheathed when not in use"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "compact multi tool",
+            "backpacking multi tool"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "mini-duct-tape",
+          "name": "Mini Duct Tape Roll",
+          "description": "Small waterproof tape for gear repairs.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "5\u202fm length",
+            "waterproof"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "mini duct tape",
+            "repair tape"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "pack-rain-cover",
+          "name": "Pack Rain Cover",
+          "description": "Additional waterproof cover for the backpack.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "3000\u202fmm rating",
+            "adjustable size"
+          ],
+          "quantity_suggestion": "1",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "backpack rain cover",
+            "waterproof pack cover"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "wool-socks-2pairs",
+          "name": "Wool Hiking Socks (2\u202fPairs)",
+          "description": "Moisture\u2011wicking merino socks for cold feet.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "merino wool",
+            "2 pairs"
+          ],
+          "quantity_suggestion": "2 pairs",
+          "priority": "optional",
+          "safety_notes": [
+            "Change if socks become wet"
+          ],
+          "compatibility_notes": [],
+          "query_terms": [
+            "merino hiking socks",
+            "cold weather socks"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        },
+        {
+          "item_key": "heavy-duty-trash-bags",
+          "name": "Heavy\u2011Duty Trash Bags",
+          "description": "Zip\u2011lock bags for packing out waste and protecting gear.",
+          "sku_type": "product",
+          "specs_to_search": [
+            "30\u202fL size",
+            "zip\u2011lock closure"
+          ],
+          "quantity_suggestion": "2",
+          "priority": "optional",
+          "safety_notes": [],
+          "compatibility_notes": [],
+          "query_terms": [
+            "heavy duty trash bags",
+            "ziplock trash bags"
+          ],
+          "identifier_hints": {
+            "mpn": null,
+            "model": null,
+            "upc": null
+          }
+        }
+      ]
+    }
+  ]
+}

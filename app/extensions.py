@@ -1,5 +1,5 @@
 import os
-import certifi  # <--- Make sure this is imported
+import certifi
 from flask_pymongo import PyMongo
 from flask_login import LoginManager
 import firebase_admin

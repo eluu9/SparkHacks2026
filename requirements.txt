@@ -5,3 +5,5 @@ firebase-admin>=6.2.0
 python-dotenv>=1.0.0
 dnspython>=2.0.0
 certifi>=2023.7.22
+groq>=0.15.0
+jsonschema>=4.17.0

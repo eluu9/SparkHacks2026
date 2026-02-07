@@ -18,9 +18,9 @@ Given the task interpretation and any clarifications, generate a kit JSON object
 - sections[] with items that include item_key, name, description, sku_type, specs_to_search, quantity_suggestion, priority, safety_notes, compatibility_notes, query_terms, identifier_hints.
 
 INPUT CONTEXT:
-- task_interpretation: {{task_interpretation}}
-- clarifications: {{clarifications}}
-- user_preferences: {{user_preferences}}
+- task_interpretation: {task_interpretation}
+- clarifications: {clarifications}
+- user_preferences: {user_preferences}
 
 OUTPUT:
 Return a JSON object that strictly matches the schema provided by the caller.

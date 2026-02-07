@@ -18,9 +18,9 @@ Given the user prompt and conversation history, return one of the following:
 - need_clarification: false and task_interpretation with: domain, goals, assumptions, constraints, safety_considerations, regulatory_or_best_practice_notes.
 
 INPUT CONTEXT:
-- user_prompt: {{user_prompt}}
-- conversation_history: {{conversation_history}}
-- optional user_preferences: {{user_preferences}}
+- user_prompt: {user_prompt}
+- conversation_history: {conversation_history}
+- optional user_preferences: {user_preferences}
 
 OUTPUT:
 Return a JSON object that strictly matches the schema provided by the caller.

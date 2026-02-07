@@ -1,0 +1,6 @@
+Flask
+pymongo
+jsonschema
+python-dotenv
+bcrypt
+requests

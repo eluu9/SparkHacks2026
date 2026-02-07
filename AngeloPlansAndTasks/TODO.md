@@ -6,6 +6,14 @@
 
 ---
 
+## Manual Build Rules (limit agentic code)
+
+- Implement code manually; avoid AI-generated full files.
+- Use AI only for narrow help (schema checks, edge cases, or test ideas).
+- Keep commits small and verifiable; run tests after each milestone.
+
+---
+
 ## Milestone A — Schemas + DTOs + MockProvider (Day 1)
 
 - [ ] **A1.** Create `app/schemas/llm_clarify_gate.schema.json` — define JSON schema for clarify gate output (`need_clarification`, `questions`, `task_interpretation` with domain/goals/assumptions/constraints/safety/regulatory fields)
@@ -77,8 +85,8 @@
 
 ## Milestone E — Real Provider Integration + Regression (Day 3)
 
-- [ ] **E1.** Test `OpenAIProvider` end-to-end with real API key (manual/CI-optional)
-- [ ] **E2.** Create "golden" regression fixtures — small set of known-good LLM outputs to detect prompt drift
+- [ ] **E1.** Test `OpenAIProvider` end-to-end with real API key (optional, after core flow works)
+- [ ] **E2.** Create "golden" regression fixtures — small set of known-good LLM outputs to detect prompt drift (optional)
 - [ ] **E3.** Add regression test that compares real provider output structure against golden fixtures (optional CI, requires key)
 - [ ] **E4.** Verify all tests run without Mongo, network access, or real API keys (CI-friendly)
 

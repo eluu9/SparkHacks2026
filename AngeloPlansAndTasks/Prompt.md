@@ -1,20 +1,26 @@
-# Prompt
+# Project Spec (Manual Build)
 
-Below is a “single paste” comprehensive prompt you can give to an AI coder to generate the full Flask + MongoDB AI shopping web app (frontend + backend) with multi-retailer search using **free APIs only**, smart clarifying questions, kit-building, and **exact-item** price comparison (via UPC/GTIN/MPN + normalization).
+This is a concise project specification for manual implementation of the Flask + MongoDB AI shopping web app (frontend + backend) with multi-retailer search using **free APIs only**, smart clarifying questions, kit-building, and **exact-item** price comparison (via UPC/GTIN/MPN + normalization).
 
-You can paste it as-is into another model.
+This is **not** a prompt for automated code generation. Keep AI use limited to targeted help (spot checks, edge cases, reviews), and implement the code manually.
 
 ---
 
-## **Comprehensive Build Prompt: “AI Shopping Kit Builder” (Flask + MongoDB)**
+## **Project Spec: “AI Shopping Kit Builder” (Flask + MongoDB)**
 
-You are an expert full-stack engineer and product designer. Build a production-ready **AI shopping web application** using:
+Goal: build a production-ready **AI shopping web application** using:
 
 - **Flask** for backend and server-rendered frontend (Jinja templates) *or* Flask API + minimal JS (your choice, but keep it simple).
 - **MongoDB** for user accounts, sessions/tokens, saved kits, item comparisons, and search logs.
-- A **pluggable LLM provider** (implement an interface; include at least one working provider using environment variables).
+- A **pluggable LLM provider** (implement an interface; include at least one working Gemini provider using environment variables).
 - Multi-retailer search via **free APIs only** (no paid keys required). Do **not** scrape websites. If a retailer has no free API, skip them. Use public/free sources.
 - A workflow that accepts **one short user prompt** (examples: “I need to replace a bathroom exhaust fan.” “We’re setting up a small workshop.” “I need a new laptop.”) and then the AI does the rest.
+
+### **Manual Build Constraints**
+
+- Do not auto-generate the full repository with AI.
+- Keep changes small and reviewable; implement iteratively.
+- AI usage is allowed for narrow tasks (schema validation checks, test ideas, or small snippets).
 
 ### **Core Product Behavior**
 
@@ -246,18 +252,17 @@ Flow:
 - Logging with request IDs.
 - Basic error pages.
 
-### **Deliverables (You must output all of these)**
+### **Deliverables (in-repo artifacts)**
 
-1. Complete repository-style code listing with file tree.
-2. Full code for each file.
-3. Setup instructions:
+1. Code committed in the repository with a clean, readable file tree.
+2. Setup instructions:
     - local venv run
     - docker compose run
-4. Example screenshots description (text only) of key pages.
-5. A small suite of tests:
+3. Example screenshots description (text only) of key pages.
+4. A small suite of tests:
     - unit tests for matcher
     - unit tests for schema validation
-6. Seed data script (optional) for demo user + demo kit.
+5. Seed data script (optional) for demo user + demo kit.
 
 ### **Constraints / Non-negotiables**
 
@@ -282,24 +287,13 @@ Flow:
 - “Buying tools for HVAC installation. Help?”
 - “I need a new laptop.”
 
-### **Final Output Format**
-
-Start with:
-
-- Project summary
-- File tree
-
-Then provide each file in a separate code block with its path as a header.
-
----
-
 ## **Optional Add-on (If time): “Retailers” Page**
 
 A page listing currently enabled free API sources, their rate limits, and coverage.
 
 ---
 
-If you follow the above, produce the complete app.
+If you follow the above, implement the app manually in small, verifiable increments.
 
 ---
 

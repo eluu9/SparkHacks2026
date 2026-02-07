@@ -1,5 +1,7 @@
 # File Structure
 
+Manual build note: start with the smallest runnable subset (schemas + services + tests). Add optional files only after the core flow works.
+
 ai-shopping-kit-builder/
 ├── [README.md](http://readme.md/)
 ├── .gitignore

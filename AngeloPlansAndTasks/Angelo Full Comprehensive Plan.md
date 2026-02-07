@@ -1,6 +1,15 @@
 # Full Comprehensive Plan
 
-Below is a concrete plan for **Angelo (Person 3: LLM + “brains” layer)** that matches the **Prompt.md overview**: (1) clarification gate → (2) kit JSON generation (no exact SKUs) → (3) query generation + fingerprints → all with **structured JSON + schema validation**, and designed so each piece is **testable in isolation**.
+Below is a concrete plan for **Angelo (Person 3: LLM + "brains" layer)** that matches the **Prompt.md overview**: (1) clarification gate → (2) kit JSON generation (no exact SKUs) → (3) query generation + fingerprints → all with **structured JSON + schema validation**.
+
+---
+
+## **Manual-First Constraints (reduce agentic code use)**
+
+- Implement code manually; avoid AI-generated full files or large blocks.
+- Use AI only for narrow help (schema checks, edge cases).
+- Keep changes small and incremental with frequent local verification.
+- Prefer deterministic logic over LLM where practical.
 
 ---
 
@@ -21,7 +30,7 @@ Below is a concrete plan for **Angelo (Person 3: LLM + “brains” layer)** tha
 
 ---
 
-## **1) Contracts first (schemas + typed DTOs)**
+## **1) Contracts first (schemas)**
 
 ### **1.1 JSON Schemas (hard requirements from Prompt.md)**
 
@@ -35,14 +44,6 @@ Add (or extend) a schema for query generation outputs:
 - app/schemas/search_candidate.schema.json (or rename to item_queries.schema.json)
 
 **Rule:** Every LLM response must validate against a schema before being used.
-
-### **1.2 Python DTO layer (for unit tests and internal clarity)**
-
-Add lightweight dataclasses/Pydantic models that mirror the schemas:
-
-- app/services/dtos.py (or keep in each service)
-
-These DTOs let you test logic without Flask, Mongo, or an actual LLM call.
 
 ---
 
@@ -59,9 +60,9 @@ In app/services/llm_service.py:
 - class LLMProvider(Protocol):
     - generate_json(system_prompt: str, user_prompt: str, schema: dict, temperature: float=0.2) -> dict
 - class OpenAIProvider(LLMProvider) (or any working provider via env vars)
-- class MockProvider(LLMProvider) for tests (returns fixtures)
+- class MockProvider(LLMProvider) for fallback/development (returns fixtures)
 
-**Design rule:** planner_service and kit_service accept a provider instance via dependency injection so unit tests can run with MockProvider.
+**Design rule:** planner_service and kit_service accept a provider instance via dependency injection.
 
 ### **2.2 Prompt templates (versioned)**
 
@@ -104,15 +105,6 @@ Each prompt file should:
     - Validate JSON
     - Return structured result
 
-### **3.3 Tests (no Flask, no DB)**
-
-File: tests/test_planner_gate.py
-
-- **Fixture tests**: feed canned prompts + mocked provider outputs.
-- Validate:
-    - questions count is 1–3 if clarification
-    - no searching occurs here (unit scope: confirm planner doesn’t call search service)
-    - schema validation rejects malformed outputs
 
 ---
 
@@ -131,7 +123,7 @@ Kit JSON must contain:
 - Include “Frequently Forgotten Items”
 - Reasonable item counts per section
 
-### **4.2 Post-processing (deterministic, testable)**
+### **4.2 Post-processing (deterministic, validated)**
 
 After schema validation, add **deterministic cleanup**:
 
@@ -139,13 +131,6 @@ After schema validation, add **deterministic cleanup**:
 - Normalize section names to canonical set:
     - Essential Items, Safety / PPE, Optional Upgrades, Budget-Friendly Alternatives, Frequently Forgotten Items
 - Deduplicate items across sections by normalized (sku_type + core name) to reduce repeats.
-
-### **4.3 Tests**
-
-File: tests/test_schemas.py + tests/test_kit_service.py (add)
-
-- Schema validation: good fixture passes; malformed fails.
-- Deterministic cleanup: stable keys, canonical sections, dedupe behavior.
 
 ---
 
@@ -161,7 +146,7 @@ File: tests/test_schemas.py + tests/test_kit_service.py (add)
     - include normalized brand, mpn, model, upc if present
     - include must-have specs (e.g., “CFM”, “size”, “voltage”) derived from specs_to_search
 
-If you still want LLM help, do it as an optional second pass:
+If you still want LLM help, do it as an optional second pass later:
 
 - LLM suggests better query phrasing but must validate against schema.
 
@@ -174,18 +159,9 @@ Per item:
 - expanded_query
 - strict_match_fingerprint: {brand?, mpn?, model?, upc?, must_have_tokens[]}
 
-### **5.3 Tests**
-
-File: tests/test_query_generation.py (add)
-
-- Given a kit fixture, verify:
-    - queries are non-empty
-    - fingerprints prefer identifiers if present
-    - must-have tokens include critical specs when present
-
 ---
 
-## **6) Conversation/state hooks (minimal, but testable)**
+## **6) Conversation/state hooks (minimal)**
 
 Prompt.md requires state machine:
 
@@ -197,43 +173,11 @@ Angelo’s layer should expose **pure functions** that help Person 1 implement s
 - should_ask_clarifiers(gate_output) -> bool
 - merge_clarifications(previous_prompt, answers) -> enriched_prompt (simple concatenation + structure)
 
-**Tests:** tests/test_state_helpers.py (add)
-
 ---
 
-## **7) Test harness and fixtures (so everything is individually testable)**
+## **7) Milestones (sequenced to unblock others)**
 
-### **7.1 Fixtures folder**
-
-Add:
-
-- tests/fixtures/prompts/ (example user prompts)
-- tests/fixtures/llm_outputs/ (valid/invalid JSON for:
-    - clarify gate
-    - kit builder
-    - query generator)
-
-### **7.2 MockProvider modes**
-
-MockProvider supports:
-
-- “return fixture by test name”
-- “return invalid JSON” (to test schema failure path)
-- “return missing keys” (to test strictness)
-
-### **7.3 CI-friendly tests**
-
-All Angelo tests must run without:
-
-- Mongo running
-- network access
-- real API keys
-
----
-
-## **8) Milestones (sequenced to unblock others)**
-
-**Milestone A (Day 1):** Schemas + DTOs + MockProvider
+**Milestone A (Day 1):** Schemas + MockProvider
 
 - Everyone can start integrating immediately with stable contracts.
 
@@ -245,17 +189,17 @@ All Angelo tests must run without:
 
 - UI can render kits reliably with stable keys/sections.
 
-**Milestone D (Day 2–3):** Query generation + fingerprints + tests
+**Milestone D (Day 2–3):** Query generation + fingerprints
 
 - Person 4 can plug search + matching using deterministic fingerprints.
 
-**Milestone E (Day 3):** Real provider integration + “golden” regression fixtures
+**Milestone E (Day 3):** Real provider integration
 
-- Keep a small set of “golden” outputs to detect prompt drift.
+- Full integration with live LLM provider and production workflow.
 
 ---
 
-## **9) Deliverables Angelo should commit**
+## **8) Deliverables Angelo should commit**
 
 - app/services/llm_service.py (provider + mock)
 - app/services/planner_service.py
@@ -263,11 +207,5 @@ All Angelo tests must run without:
 - app/services/query_service.py (or part of kit_service)
 - app/services/prompts/*.md
 - Schema tweaks in app/schemas/*
-- Tests:
-    - tests/test_planner_gate.py
-    - tests/test_kit_service.py
-    - tests/test_query_generation.py
-    - tests/test_schemas.py
-    - fixtures under tests/fixtures/*
 
-This structure matches Prompt.md’s required workflow (clarify → kit JSON → query/fingerprint), keeps outputs schema-valid, and makes each unit independently testable without any external dependencies.
+This structure matches Prompt.md's required workflow (clarify → kit JSON → query/fingerprint) and keeps outputs schema-valid.

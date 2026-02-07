@@ -3,60 +3,71 @@ import jsonschema
 import requests
 import os
 from google import genai
-
 from pathlib import Path
+
 
 config = json.loads(Path("app/config.json").read_text(encoding="utf-8"))
 
 class LocalLLMProvider:
+
     def generate_response(self, system_prompt, user_prompt, schema):
-        if config.get("UsingGemini"): 
-            client = genai.Client(os.getenv("GEMINI_API_KEY"))
-            if client is None:
-                raise ValueError("GEMINI_API_KEY environment variable not set")
-
-            response = client.models.generate_content(
-                model=config.get("GeminiModelName"),
-                contents=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                format=schema if schema is not None else "json"
-            )
+        if config.get("UsingGemini"):
+            content = self._call_gemini(system_prompt, user_prompt)
         else:
-            prompt = {
-                "model": config.get("LocalModelName"),
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                "stream": False,
-            }
+            content = self._call_local(system_prompt, user_prompt, schema)
 
-            # json format fallback if no schema is provided -> suggested by copilot
-            if schema is not None:
-                prompt["format"] = schema
-            else:
-                prompt["format"] = "json"
+        parsed = json.loads(content)
+        return parsed
 
-            response = requests.post(f"{config.get('LocalModelUrl')}", json=prompt, timeout=240)
-            response.raise_for_status()
-        
-        data = response.json()
-        content = data.get("message", {}).get("content", "")
 
-        return json.loads(content)
+    def _call_gemini(self, system_prompt, user_prompt):
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+
+        client = genai.Client(api_key=api_key)
+
+        response = client.models.generate_content(
+            model=config.get("GeminiModelName"),
+            contents=f"SYSTEM:\n{system_prompt}\n\nUSER:\n{user_prompt}",
+            config={"response_mime_type": "application/json"},
+        )
+
+        text = getattr(response, "text", "") or ""
+        if not text:
+            try:
+                parts = response.candidates[0].content.parts
+                text = "".join(getattr(p, "text", "") for p in parts)
+            except Exception:
+                text = ""
+
+        if not text:
+            raise ValueError("Gemini returned an empty response")
+
+        return text
+
+    def _call_local(self, system_prompt, user_prompt, schema):
+        body = {
+            "model": config.get("LocalModelName"),
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "stream": False,
+            "format": schema if schema is not None else "json",
+        }
+
+        resp = requests.post(config.get("LocalModelUrl"), json=body, timeout=240)
+        resp.raise_for_status()
+        return resp.json().get("message", {}).get("content", "")
+
 
 def validate_response(response, schema):
     if schema is None:
         return response
-
-    # Checks if the json returned by the LLM matches the provided schema 
     jsonschema.validate(instance=response, schema=schema)
     return response
 
-def convert_schema_to_dict(schema_str):
-    try:
-        return json.loads(Path(schema_str).read_text(encoding="utf-8"))
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Invalid JSON schema: {e}")
+
+def convert_schema_to_dict(schema_path):
+    return json.loads(Path(schema_path).read_text(encoding="utf-8"))

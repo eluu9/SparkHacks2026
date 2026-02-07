@@ -1,14 +1,3 @@
-def generate_item_queries(kit_json):
-    queries = []
-    
-    for section in kit_json.get("sections", []):
-        for item in section.get("items", []):
-            query = build_query_for_item(item)
-            queries.append(query)
-    
-    return {"items": queries}
-
-
 def build_query_for_item(item):
     item_key = item.get("item_key", "")
     name = item.get("name", "")

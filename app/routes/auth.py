@@ -5,10 +5,9 @@ from firebase_admin import auth as firebase_auth
 from app.models.user import User
 from app.extensions import mongo
 
-# 1. DEFINE BP FIRST
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-# 2. ROUTES
+# Routes
 @bp.route('/login')
 def login_page():
     return render_template('login.html')
@@ -26,33 +25,23 @@ def session_login():
         return jsonify({'status': 'error', 'error': 'Missing ID token'}), 400
 
     try:
-        # 1. Verify the Firebase token
         decoded_token = firebase_auth.verify_id_token(id_token)
-        
-        # 2. Get or create the user in MongoDB
         user_data = User.get_or_create(decoded_token)
         user = User(user_data)
-        
-        # 3. Log in the user with Flask-Login
         login_user(user, remember=True)
-        
-        # 4. Set session flag for security
         session['is_secure_lab'] = True
         
-        # Return success to the frontend
         return jsonify({
             'status': 'success', 
             'user': user.username
         })
         
     except Exception as e:
-        print(f"!! Auth Error: {e}")
         return jsonify({'status': 'error', 'error': str(e)}), 401
 
 @bp.route('/logout')
 @login_required
 def logout():
-    # Clear session and log out
     session.pop('is_secure_lab', None)
     logout_user()
     return redirect(url_for('auth.login_page'))

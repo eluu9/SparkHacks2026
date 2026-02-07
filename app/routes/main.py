@@ -1,4 +1,3 @@
-# app/routes/main.py
 from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
 
@@ -13,5 +12,4 @@ def root():
 @bp.route('/dashboard')
 @login_required
 def index():
-    # Ensure this renders your main chat interface
     return render_template('index.html')

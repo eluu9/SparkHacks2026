@@ -7,3 +7,5 @@ dnspython>=2.0.0
 certifi>=2023.7.22
 groq>=0.15.0
 jsonschema>=4.17.0
+requests>=2.31.0
+gunicorn>=22.0.0

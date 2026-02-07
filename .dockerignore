@@ -1,0 +1,12 @@
+.venv/
+.git/
+.gitignore
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+install.ps1
+Dockerfile
+.dockerignore

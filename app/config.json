@@ -1,6 +1,3 @@
 {
-    "UsingGroq": true,
-    "GroqModelName": "llama-3.3-70b-versatile",
-    "LocalModelUrl": "http://localhost:11434/api/chat",
-    "LocalModelName": "qwen2.5:7b-instruct"
+    "GroqModelName": "llama-3.3-70b-versatile"
 }

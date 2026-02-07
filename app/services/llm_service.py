@@ -1,6 +1,5 @@
 import json
 import jsonschema
-import requests
 import os
 from groq import Groq
 from pathlib import Path
@@ -18,11 +17,7 @@ class LocalLLMProvider:
             
         for attempt in range(max_retries + 1):
             try:
-                if config.get("UsingGroq"):
-                    content = self._call_groq(system_prompt, user_prompt, schema)
-                else:
-                    content = self._call_local(system_prompt, user_prompt, schema)
-
+                content = self._call_groq(system_prompt, user_prompt, schema)
                 parsed = json.loads(content)
                 
                 if schema is not None:
@@ -39,7 +34,6 @@ class LocalLLMProvider:
                     raise
 
     def _call_groq(self, system_prompt, user_prompt, schema=None):
-        # Everything from here down must be indented by 4 spaces (1 tab)
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
             raise ValueError("GROQ_API_KEY not set")

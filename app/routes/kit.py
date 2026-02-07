@@ -18,7 +18,6 @@ def handle_request():
     # Run the full agentic pipeline
     final_output = run_lab_pipeline(user_input)
     
-    # Save the interaction to the DB if a kit was built
     if final_output.get("type") == "final_kit":
         mongo.db.kits.insert_one({
             "user_id": current_user.id,
@@ -31,10 +30,7 @@ def handle_request():
 @bp.route('/history', methods=['GET'])
 @login_required
 def get_history():
-    # Only find kits where the user_id matches the logged-in user
     user_kits = mongo.db.kits.find({"user_id": current_user.id}).sort("created_at", -1)
-    
-    # Map the database results to the format the sidebar expects
     return jsonify([{
         "kit_name": k.get("kit_name", "New Config"),
         "created_at": k.get("created_at")

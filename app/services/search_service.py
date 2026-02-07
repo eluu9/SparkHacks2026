@@ -1,17 +1,14 @@
 import os
 import json
-from pymongo.database import Database
 import time
 import datetime
 import requests
-from bs4 import BeautifulSoup
 
 
 class SearchService:
     def __init__(self, mongo_db=None):
         self.db = mongo_db
         self.lastRequestTime = 0
-        # FIXED: Explicit comparison for PyMongo compatibility
         if self.db is not None:
             self.db.search_cache.create_index("created_at", expireAfterSeconds=86400)
 
@@ -22,7 +19,6 @@ class SearchService:
         self.lastRequestTime = time.time()
 
     def getFromCache(self, query: str, source: str):
-        # FIXED: Explicit comparison
         if self.db is not None:
             result = self.db.search_cache.find_one({"query": query, "source": source})
             if result:
@@ -30,7 +26,6 @@ class SearchService:
         return None
 
     def saveToCache(self, query: str, source: str, results):
-        # FIXED: Explicit comparison
         if self.db is not None:
             if self.db.search_cache.find_one({"query": query, "source": source}):
                 self.db.search_cache.update_one(
@@ -83,15 +78,14 @@ class SearchService:
                 self.saveToCache(query, "google_shopping", results)
                 return results
             else:
-                print(f"DEBUG: Serper API Error {response.status_code}")
+                print(f"Serper API Error {response.status_code}")
         except Exception as e:
-            print(f"DEBUG: Serper logic crash: {e}")
+            print(f"Serper request failed: {e}")
         
         return []
     def searchAllSources(self, query: str):
         uniqueResults = []
         try:
-            # CHANGE: Call searchGoogleShopping instead of searchAmazon
             resultList = self.searchGoogleShopping(query)
             
             seen_titles = set()
@@ -105,5 +99,4 @@ class SearchService:
             return []
 
     def search(self, query: str):
-        # This now points to searchAllSources -> searchGoogleShopping
         return self.searchAllSources(query)

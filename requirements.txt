@@ -1,6 +1,11 @@
-Flask
-pymongo
-jsonschema
-python-dotenv
-bcrypt
-requests
+Flask>=3.0.0
+Flask-PyMongo>=2.3.0
+Flask-Login>=0.6.0
+firebase-admin>=6.2.0
+python-dotenv>=1.0.0
+dnspython>=2.0.0
+certifi>=2023.7.22
+groq>=0.15.0
+jsonschema>=4.17.0
+requests>=2.31.0
+gunicorn>=22.0.0

@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login with Google</h1>
-    <button id="login-btn">Sign in with Google</button>
+{% extends "base.html" %}
 
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-      import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-      const firebaseConfig = {
+{% block content %}
+<div class="auth-flex-center"> <div class="login-card pop-animation">
+        
+        <div class="text-center mb-4">
+            <h3 class="fw-bold text-dark ls-tight">Welcome Back</h3>
+            <p class="text-muted small">Sign in to sync your wardrobe and kits</p>
+        </div>
+
+        <button id="google-signin-trigger" class="btn btn-outline-dark w-100 pill-btn d-flex align-items-center justify-content-center gap-2 mb-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="16" alt="G">
+            Sign in with Google
+        </button>
+
+        <div class="position-relative mb-4">
+            <hr class="text-muted opacity-25">
+            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">
+                Secure Access
+            </span>
+        </div>
+
+        <div class="text-center">
+            <p class="small text-muted mb-0">
+                New to the lab? <a href="/auth/signup" class="text-dark fw-bold text-decoration-none">Create Account</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    
+    // config from firebase console
+    const firebaseConfig = {
         apiKey: "AIzaSyCrDraVHDBhnQNFMq4JkqNffCQuA4O9FpI",
         authDomain: "sparkhacks-b2985.firebaseapp.com",
         projectId: "sparkhacks-b2985",
@@ -20,25 +47,44 @@
         measurementId: "G-09JS9YQS93"
     };
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
+    // start the app
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
 
-      document.getElementById('login-btn').addEventListener('click', () => {
-        signInWithPopup(auth, provider).then((result) => {
-          result.user.getIdToken().then((idToken) => {
-            fetch('/auth/session-login', {
+    // handle the click
+    const loginBtn = document.getElementById('google-signin-trigger');
+    
+    loginBtn.addEventListener('click', async () => {
+        try {
+            console.log("Attempting Google Sign-in...");
+            const result = await signInWithPopup(auth, provider);
+            const idToken = await result.user.getIdToken();
+
+            // sync with our backend session
+            const response = await fetch('/auth/session-login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ idToken: idToken })
-            }).then(res => res.json()).then(data => {
-                if(data.status === 'success') {
-                    window.location.href = '/';
-                }
             });
-          });
-        });
-      });
-    </script>
-</body>
-</html>
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                window.location.href = '/';
+            } else {
+                console.error("Backend session failed:", data.error);
+                alert("Something went wrong on our end. Try again?");
+            }
+
+        } catch (error) {
+            console.error("Firebase Login Failed:", error.code, error.message);
+            
+            // basic user feedback
+            if (error.code !== 'auth/popup-closed-by-user') {
+                alert("Login failed: " + error.message);
+            }
+        }
+    });
+</script>
+{% endblock %}

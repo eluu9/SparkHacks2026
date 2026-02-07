@@ -1,5 +1,7 @@
 {
-    "UsingGemini": false,
+    "UsingGemini": true,
+    "GeminiModelName": "gemini-2.5-flash",
     "LocalModelUrl": "http://localhost:11434/api/chat",
     "LocalModelName": "qwen2.5:7b-instruct"
+
 }

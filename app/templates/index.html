@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid p-0" style="height: calc(100vh - 60px);"> <div class="row h-100 g-0">
+        
+        <div class="col-md-3 bg-white border-end d-none d-md-flex flex-column">
+            <div class="p-4">
+                <h6 class="text-uppercase text-muted fw-bold small mb-4" style="letter-spacing: 0.05rem;">
+                    Recent Lab Sessions
+                </h6>
+                
+                <div class="list-group list-group-flush gap-2" id="chat-sidebar-list">
+                    <button class="list-group-item list-group-item-action border-0 rounded-3 active bg-light text-dark fw-bold mb-1">
+                        <i class="bi bi-plus-circle me-2"></i> New Outfit
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 rounded-3 text-muted small">
+                        Archive: Streetwear $200
+                    </button>
+                </div>
+            </div>
+
+            </div>
+
+        <div class="col-md-9 d-flex flex-column h-100 position-relative">
+            
+            <div id="chat-display" class="flex-grow-1 p-4 px-lg-5" style="overflow-y: auto; scroll-behavior: smooth;">
+                
+                <div class="d-flex mb-4 pop-animation">
+                    <div class="msg-ai p-3" style="max-width: 80%;">
+                        {% if current_user.is_authenticated %}
+                            Yo {{ current_user.name.split(' ')[0] }}! I'm your AI stylist. Drop a budget and a vibe (e.g., "$150 Vintage 90s") and I'll pull together a kit.
+                        {% else %}
+                            Welcome! Drop a vibe and a budget, and I'll build you a custom shopping kit.
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pb-4 pt-2 px-4 bg-transparent">
+                <div class="mx-auto" style="max-width: 850px;">
+                    <form id="chat-form" class="bg-white shadow-sm rounded-pill p-2 d-flex gap-2 border">
+                        <input type="text" 
+                               id="user-input" 
+                               class="form-control border-0 bg-transparent px-4 shadow-none" 
+                               placeholder="What are we wearing today?..." 
+                               autocomplete="off"
+                               required>
+                        
+                        <button type="submit" class="btn btn-dark pill-btn px-4">
+                            Build Kit <i class="bi bi-stars ms-1"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

@@ -2,80 +2,72 @@ import json
 import jsonschema
 import requests
 import os
-
+from google import genai
 from pathlib import Path
 
 
 config = json.loads(Path("app/config.json").read_text(encoding="utf-8"))
 
 class LocalLLMProvider:
+
     def generate_response(self, system_prompt, user_prompt, schema):
-        prompt = {
+        if config.get("UsingGemini"):
+            content = self._call_gemini(system_prompt, user_prompt)
+        else:
+            content = self._call_local(system_prompt, user_prompt, schema)
+
+        parsed = json.loads(content)
+        return parsed
+
+
+    def _call_gemini(self, system_prompt, user_prompt):
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+
+        client = genai.Client(api_key=api_key)
+
+        response = client.models.generate_content(
+            model=config.get("GeminiModelName"),
+            contents=f"SYSTEM:\n{system_prompt}\n\nUSER:\n{user_prompt}",
+            config={"response_mime_type": "application/json"},
+        )
+
+        text = getattr(response, "text", "") or ""
+        if not text:
+            try:
+                parts = response.candidates[0].content.parts
+                text = "".join(getattr(p, "text", "") for p in parts)
+            except Exception:
+                text = ""
+
+        if not text:
+            raise ValueError("Gemini returned an empty response")
+
+        return text
+
+    def _call_local(self, system_prompt, user_prompt, schema):
+        body = {
             "model": config.get("LocalModelName"),
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
             "stream": False,
+            "format": schema if schema is not None else "json",
         }
 
-        # json format fallback if no schema is provided -> suggested by copilot
-        if schema is not None:
-            prompt["format"] = schema
-        else:
-            prompt["format"] = "json"
+        resp = requests.post(config.get("LocalModelUrl"), json=body, timeout=240)
+        resp.raise_for_status()
+        return resp.json().get("message", {}).get("content", "")
 
-        response = requests.post(f"{config.get('LocalModelUrl')}", json=prompt, timeout=30)
-        response.raise_for_status()
-        data = response.json()
-        content = data.get("message", {}).get("content", "")
-
-        return json.loads(content)
-
-# class GeminiProvider:
-#     def __init__(self, api_key=None, model=None, base_url=None):
-#         self.api_key = api_key or os.getenv("GEMINI_API_KEY", "")
-#         self.model = model or os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
-#         self.base_url = base_url or os.getenv("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/models")
-
-#     def generate_response(self, system_prompt, user_prompt, schema):
-#         url = f"{self.base_url}/{self.model}:generateContent?key={self.api_key}"
-#         payload = {
-#             "contents": [
-#                 {
-#                     "role": "user",
-#                     "parts": [
-#                         {"text": system_prompt},
-#                         {"text": user_prompt},
-#                     ],
-#                 }
-#             ],
-#             "generationConfig": {
-#                 "temperature": 0.2,
-#                 "responseMimeType": "application/json",
-#             },
-#         }
-#         if schema is not None:
-#             payload["generationConfig"]["responseSchema"] = schema
-
-#         response = requests.post(url, json=payload, timeout=30)
-#         response.raise_for_status()
-#         data = response.json()
-#         text = (
-#             data.get("candidates", [{}])[0]
-#             .get("content", {})
-#             .get("parts", [{}])[0]
-#             .get("text", "")
-#         )
-#         try:
-#             return json.loads(text)
-#         except json.JSONDecodeError:
-#             return {"text": text}
 
 def validate_response(response, schema):
     if schema is None:
         return response
-
-    # Checks if the json returned by the LLM matches the provided schema 
     jsonschema.validate(instance=response, schema=schema)
     return response
+
+
+def convert_schema_to_dict(schema_path):
+    return json.loads(Path(schema_path).read_text(encoding="utf-8"))

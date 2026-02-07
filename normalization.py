@@ -1,6 +1,6 @@
 import re
 
-def normalizeString(input: str) -> str:
+def normalizeString(input: str):
     stringList = input.split()
     for i in range(len(stringList)):
         if (stringList[i] == None):
@@ -10,7 +10,7 @@ def normalizeString(input: str) -> str:
     return " ".join(stringList)
 
 
-def normalizeUPCAndEPN(input: str) -> str:
+def normalizeUPCAndEPN(input: str):
     stringList = normalizeString(input)
     upcString = "".join(stringList)
     upcString = re.sub(r"[^0-9]", "", upcString)  # Extract only digits

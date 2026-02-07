@@ -9,7 +9,6 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def login_page():
     return render_template('login.html')
 
-# ADD THIS: Route for your new signup page
 @bp.route('/signup')
 def signup_page():
     return render_template('signup.html')
@@ -23,13 +22,8 @@ def session_login():
         return jsonify({'error': 'Missing ID token'}), 400
 
     try:
-        # 1. Verify token with Firebase Admin SDK
         decoded_token = firebase_auth.verify_id_token(id_token)
-        
-        # 2. Sync to DB: This handles both NEW and EXISTING users
         user = User.get_or_create(decoded_token)
-        
-        # 3. Log into Flask-Login session
         login_user(user, remember=True)
         
         return jsonify({'status': 'success'})

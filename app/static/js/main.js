@@ -1,171 +1,150 @@
 document.addEventListener('DOMContentLoaded', () => {
     const chatForm = document.getElementById('chat-form');
-    const userInput = document.getElementById('user-input');
-    const chatDisplay = document.getElementById('chat-display');
+    const input = document.getElementById('user-input');
+    const display = document.getElementById('chat-display');
+
+    refreshSidebar();
 
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const text = userInput.value.trim();
-        if (!text) return;
+        const query = input.value.trim();
+        if (!query) return;
 
-        // 1. Immediately show user message
-        appendMessage('user', text);
-        userInput.value = '';
+        addMessage('user', query);
+        input.value = '';
 
         try {
-            // 2. Fetch from your Flask API
-            const response = await fetch('/api/kit/generate', {
+            const res = await fetch('/api/kit/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ style: text })
+                body: JSON.stringify({ style: query })
             });
-            const data = await response.json();
 
-            // 3. Show AI response
+            if (!res.ok) throw new Error('API failed');
+            const payload = await res.json();
+
             setTimeout(() => {
-                appendMessage('ai', `Got it! I've put together a ${data.kit_name} within your budget.`);
-            }, 600); // Slight delay for a more natural feel
+                if (payload.type === 'comparison') {
+                    showComparison(payload);
+                } else {
+                    addMessage('ai', `Alright, I built a ${payload.kit_name} for you. Check it out:`);
+                    showKitGrid(payload);
+                }
+                refreshSidebar();
+            }, 750);
 
         } catch (err) {
-            appendMessage('ai', "Sorry, I'm having trouble connecting right now.");
+            console.error(err);
+            addMessage('ai', "Server error. Check login status?");
         }
     });
 
-    function appendMessage(sender, text) {
-        const wrapper = document.createElement('div');
-        // 'chat-bubble-anim' triggers the slow pop-up
-        wrapper.className = `d-flex mb-4 chat-bubble-anim ${sender === 'user' ? 'justify-content-end' : 'justify-content-start'}`;
-        
+    function addMessage(who, msg) {
+        const row = document.createElement('div');
+        row.className = `d-flex mb-4 pop-animation ${who === 'user' ? 'justify-content-end' : 'justify-content-start'}`;
         const bubble = document.createElement('div');
-        bubble.className = `p-3 shadow-sm ${sender === 'user' ? 'user-bubble' : 'ai-bubble'}`;
+        bubble.className = `p-3 shadow-sm ${who === 'user' ? 'msg-user' : 'msg-ai'}`;
         bubble.style.maxWidth = '75%';
-        bubble.innerText = text;
-
-        wrapper.appendChild(bubble);
-        chatDisplay.appendChild(wrapper);
-        
-        // Smooth scroll to bottom
-        chatDisplay.scrollTo({ top: chatDisplay.scrollHeight, behavior: 'smooth' });
+        bubble.innerText = msg;
+        row.appendChild(bubble);
+        display.appendChild(row);
+        display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
     }
-    function appendKitCard(kitData) {
-    const chatDisplay = document.getElementById('chat-display');
 
-    // Filter items into categories based on the 'type' field from our AI/Mock data
-    const essentials = kitData.items.filter(item => item.type === 'essential');
-    const extras = kitData.items.filter(item => item.type === 'extra');
-
-    const cardHtml = `
-        <div class="card border-0 shadow-sm mb-4 chat-bubble-anim ai-bubble-container" style="max-width: 90%;">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0">${kitData.kit_name}</h5>
-                    <span class="badge bg-dark rounded-pill px-3">$${kitData.total_price}</span>
-                </div>
-                <p class="text-muted small mb-4">${kitData.description || "Your custom curated look is ready."}</p>
-
-                <h6 class="text-uppercase text-primary fw-bold small mb-3 ls-1">Essentials</h6>
-                <div class="row g-3 mb-4">
-                    ${essentials.map(item => renderItemCard(item)).join('')}
-                </div>
-
-                ${extras.length > 0 ? `
-                    <h6 class="text-uppercase text-muted fw-bold small mb-3 ls-1">Extras</h6>
-                    <div class="row g-3">
-                        ${extras.map(item => renderItemCard(item)).join('')}
+    function showKitGrid(data) {
+        const tops = data.items.filter(i => i.type === 'essential');
+        const extras = data.items.filter(i => i.type === 'extra');
+        const html = `
+            <div class="card border-0 shadow-sm mb-4 pop-animation ai-kit-grid" style="max-width: 90%;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">${data.kit_name}</h5>
+                        <span class="badge bg-dark rounded-pill px-3">$${data.total_price}</span>
                     </div>
-                ` : ''}
-            </div>
-        </div>
-    `;
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'd-flex mb-3 justify-content-start';
-    wrapper.innerHTML = cardHtml;
-    chatDisplay.appendChild(wrapper);
-    
-    chatDisplay.scrollTo({ top: chatDisplay.scrollHeight, behavior: 'smooth' });
-}
-
-// Helper to render individual item cards within the grid
-function renderItemCard(item) {
-    return `
-        <div class="col-6 col-md-4">
-            <div class="p-3 border rounded-4 bg-light h-100 d-flex flex-column">
-                <span class="fw-bold small d-block mb-1">${item.name}</span>
-                <span class="text-muted smallest mb-2">${item.color}</span>
-                <div class="mt-auto d-flex justify-content-between align-items-center">
-                    <span class="fw-bold">$${item.price}</span>
-                    <a href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent(item.name + ' ' + item.color)}" 
-                       target="_blank" class="btn btn-link p-0 text-dark">
-                        <i class="bi bi-arrow-up-right-circle fs-5"></i>
-                    </a>
+                    <p class="text-muted small mb-4">${data.description || "Curated for your vibe."}</p>
+                    <h6 class="text-uppercase text-primary fw-bold smallest mb-3 ls-1">Must-Haves</h6>
+                    <div class="row g-3 mb-4">${tops.map(i => renderItemTile(i)).join('')}</div>
+                    ${extras.length > 0 ? `
+                        <h6 class="text-uppercase text-muted fw-bold smallest mb-3 ls-1">The Extras</h6>
+                        <div class="row g-3">${extras.map(i => renderItemTile(i)).join('')}</div>
+                    ` : ''}
                 </div>
-            </div>
-        </div>
-    `;
-}
+            </div>`;
+        renderRawHtml(html);
+    }
 
-async function loadChatHistory() {
-    try {
-        const response = await fetch('/api/kit/history');
-        const kits = await response.json();
-        const sidebar = document.querySelector('.list-group');
-        
-        if (kits.length > 0) {
-            sidebar.innerHTML = kits.map(kit => `
-                <button class="list-group-item list-group-item-action border-0 rounded-3 text-muted small mb-1">
-                    <i class="bi bi-archive me-2"></i> ${kit.kit_name} - $${kit.total_price}
-                </button>
-            `).join('');
+    function renderItemTile(item) {
+        return `
+            <div class="col-6 col-md-4">
+                <div class="p-3 border rounded-4 bg-light h-100 d-flex flex-column">
+                    <span class="fw-bold smallest d-block mb-1 text-truncate">${item.name}</span>
+                    <span class="text-muted smallest mb-2">${item.color}</span>
+                    <div class="mt-auto d-flex justify-content-between align-items-center pt-2">
+                        <span class="fw-bold small">$${item.price}</span>
+                        <a href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent(item.name + ' ' + item.color)}" target="_blank" class="text-dark">
+                            <i class="bi bi-arrow-up-right-circle fs-5"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    function showComparison(item) {
+        const html = `
+            <div class="card border-0 shadow-sm mb-4 pop-animation" style="max-width: 85%; border-radius: 20px;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="fw-bold mb-0">${item.name}</h5>
+                        <span class="badge bg-success rounded-pill">$${item.price}</span>
+                    </div>
+                    <p class="small text-muted mb-3">${item.description}</p>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="p-2 rounded-3 bg-light border-start border-success border-4 h-100">
+                                <p class="smallest fw-bold text-success mb-1">THE GOOD</p>
+                                <ul class="smallest p-0 list-unstyled mb-0">${item.pros.map(p => `<li>• ${p}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 rounded-3 bg-light border-start border-danger border-4 h-100">
+                                <p class="smallest fw-bold text-danger mb-1">THE BAD</p>
+                                <ul class="smallest p-0 list-unstyled mb-0">${item.cons.map(c => `<li>• ${c}</li>`).join('')}</ul>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="${item.buy_url}" target="_blank" class="btn btn-dark w-100 pill-btn">Get It Now <i class="bi bi-cart4 ms-2"></i></a>
+                </div>
+            </div>`;
+        renderRawHtml(html);
+    }
+
+    function renderRawHtml(raw) {
+        const div = document.createElement('div');
+        div.className = 'd-flex mb-3 justify-content-start';
+        div.innerHTML = raw;
+        display.appendChild(div);
+        display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
+    }
+
+    async function refreshSidebar() {
+        try {
+            const r = await fetch('/api/kit/history');
+            const data = await r.json();
+            const list = document.getElementById('chat-sidebar-list');
+            if (data && data.length > 0) {
+                const historyHtml = data.map(k => `
+                    <button class="list-group-item list-group-item-action border-0 rounded-3 text-muted small mb-1 py-2">
+                        <i class="bi bi-clock-history me-2"></i> ${k.kit_name}
+                    </button>
+                `).join('');
+                list.innerHTML = `
+                    <button class="list-group-item list-group-item-action border-0 rounded-3 active bg-light text-dark fw-bold mb-2 py-2">
+                        <i class="bi bi-plus-circle me-2"></i> Start Fresh
+                    </button>
+                    ${historyHtml}`;
+            }
+        } catch (err) {
+            console.log(err);
         }
-    } catch (err) {
-        console.error("Could not load database items:", err);
     }
-}
-
-// Function to render a detailed comparison for things like Tents
-function appendComparisonCard(product) {
-    const chatDisplay = document.getElementById('chat-display');
-    const cardHtml = `
-        <div class="card border-0 shadow-sm mb-4 chat-bubble-anim" style="max-width: 85%;">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <h5 class="fw-bold mb-0">${product.name}</h5>
-                    <span class="badge bg-success rounded-pill">$${product.price}</span>
-                </div>
-                <p class="small text-muted mb-3">${product.description}</p>
-                
-                <div class="row g-2 mb-3">
-                    <div class="col-6">
-                        <div class="p-2 rounded-3 bg-light border-start border-success border-4">
-                            <p class="smallest fw-bold text-success mb-1">PROS</p>
-                            <ul class="smallest p-0 list-unstyled mb-0">
-                                ${product.pros.map(p => `<li>• ${p}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-2 rounded-3 bg-light border-start border-danger border-4">
-                            <p class="smallest fw-bold text-danger mb-1">CONS</p>
-                            <ul class="smallest p-0 list-unstyled mb-0">
-                                ${product.cons.map(c => `<li>• ${c}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <a href="${product.buy_url}" target="_blank" class="btn btn-dark w-100 btn-pill">
-                    Buy Now <i class="bi bi-bag-check ms-2"></i>
-                </a>
-            </div>
-        </div>`;
-    const wrapper = document.createElement('div');
-    wrapper.className = 'd-flex mb-3 justify-content-start';
-    wrapper.innerHTML = cardHtml;
-    chatDisplay.appendChild(wrapper);
-    chatDisplay.scrollTo({ top: chatDisplay.scrollHeight, behavior: 'smooth' });
-}
-
-// Call this when the page loads
-document.addEventListener('DOMContentLoaded', loadChatHistory);
 });

@@ -25,7 +25,7 @@ class LocalLLMProvider:
         else:
             prompt["format"] = "json"
 
-        response = requests.post(f"{config.get('LocalModelUrl')}", json=prompt, timeout=30)
+        response = requests.post(f"{config.get('LocalModelUrl')}", json=prompt, timeout=240)
         response.raise_for_status()
         data = response.json()
         content = data.get("message", {}).get("content", "")
@@ -79,3 +79,9 @@ def validate_response(response, schema):
     # Checks if the json returned by the LLM matches the provided schema 
     jsonschema.validate(instance=response, schema=schema)
     return response
+
+def convert_schema_to_dict(schema_str):
+    try:
+        return json.loads(Path(schema_str).read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON schema: {e}")

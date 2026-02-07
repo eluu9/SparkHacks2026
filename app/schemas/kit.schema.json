@@ -43,7 +43,7 @@
                 "safety_notes",
                 "compatibility_notes",
                 "query_terms",
-                "identifier_hints"
+                "identifier"
               ],
               "properties": {
                 "item_key": {
@@ -102,7 +102,7 @@
                     "minLength": 1
                   }
                 },
-                "identifier_hints": {
+                "identifier": {
                   "type": "object",
                   "additionalProperties": false,
                   "required": ["mpn", "model", "upc"],

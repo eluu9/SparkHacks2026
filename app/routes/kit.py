@@ -31,9 +31,11 @@ def handle_request():
 @bp.route('/history', methods=['GET'])
 @login_required
 def get_history():
-    # Fetch kits for the logged-in user
+    # Only find kits where the user_id matches the logged-in user
     user_kits = mongo.db.kits.find({"user_id": current_user.id}).sort("created_at", -1)
+    
+    # Map the database results to the format the sidebar expects
     return jsonify([{
-        "kit_name": k["kit_name"], 
-        "total_price": k.get("total_price", "N/A") 
+        "kit_name": k.get("kit_name", "New Config"),
+        "created_at": k.get("created_at")
     } for k in user_kits])

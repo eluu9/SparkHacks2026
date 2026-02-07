@@ -1,14 +1,18 @@
+import os
+import json
 from pymongo.database import Database
 import time
 import datetime
 import requests
 from bs4 import BeautifulSoup
 
+
 class SearchService:
     def __init__(self, mongo_db=None):
         self.db = mongo_db
         self.lastRequestTime = 0
-        if self.db:
+        # FIXED: Explicit comparison for PyMongo compatibility
+        if self.db is not None:
             self.db.search_cache.create_index("created_at", expireAfterSeconds=86400)
 
     def rateLimit(self):
@@ -18,80 +22,88 @@ class SearchService:
         self.lastRequestTime = time.time()
 
     def getFromCache(self, query: str, source: str):
-        result = self.db.search_cache.find_one({"query": query, "source": source})
-        if result:
-            return result.get("results")
+        # FIXED: Explicit comparison
+        if self.db is not None:
+            result = self.db.search_cache.find_one({"query": query, "source": source})
+            if result:
+                return result.get("results")
         return None
 
     def saveToCache(self, query: str, source: str, results):
-        if self.db.search_cache.find_one({"query": query, "source": source}):
-            self.db.search_cache.update_one(
-                {"query": query, "source": source},
-                {"$set": {"query": query, "source": source, "results": results, "created_at": datetime.datetime.now(datetime.timezone.utc)}})
-        else:
-            self.db.search_cache.insert_one({"query": query, "source": source, "results": results, "created_at": datetime.datetime.now(datetime.timezone.utc)})
+        # FIXED: Explicit comparison
+        if self.db is not None:
+            if self.db.search_cache.find_one({"query": query, "source": source}):
+                self.db.search_cache.update_one(
+                    {"query": query, "source": source},
+                    {"$set": {
+                        "results": results, 
+                        "created_at": datetime.datetime.now(datetime.timezone.utc)
+                    }}
+                )
+            else:
+                self.db.search_cache.insert_one({
+                    "query": query, 
+                    "source": source, 
+                    "results": results, 
+                    "created_at": datetime.datetime.now(datetime.timezone.utc)
+                })
 
-    def searchAmazon(self, query: str):
+    def searchGoogleShopping(self, query: str):
         self.rateLimit()
-        cachedResults = self.getFromCache(query, "amazon")
-        if cachedResults:
-            return cachedResults
+        cachedResults = self.getFromCache(query, "google_shopping")
+        if cachedResults: return cachedResults
+
+        url = "https://google.serper.dev/shopping"
+        
+        # Get your key from .env
+        api_key = os.getenv("SERPER_API_KEY") 
+        
+        payload = json.dumps({"q": query})
+        headers = {
+            'X-API-KEY': api_key,
+            'Content-Type': 'application/json'
+        }
 
         try:
-            url = f"https://www.amazon.com/s?k={query.replace(' ', '+')}"
-            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-
-            response = requests.get(url, headers=headers, timeout=5)
+            response = requests.post(url, headers=headers, data=payload, timeout=10)
             if response.status_code == 200:
-                data = BeautifulSoup(response.content, "html.parser")
+                data = response.json()
                 results = []
 
-                products = data.find_all("div", {"data-component-type": "s-search-result"})[:20]
-                for info in products:
-                    try:
-                        title_elem = info.h2.a.span if info.h2 and info.h2.a else None
-                        title = title_elem.text.strip() if title_elem else ""
-                        
-                        price_elem = info.find('span', 'a-price-whole')
-                        price = price_elem.text.strip() if price_elem else None
-
-                        link = info.h2.a['href'] if info.h2 and info.h2.a else None
-                        product_url = f"https://amazon.com{link}" if link else ""
-                        
-                        results.append({
-                            "title": title, 
-                            "price": price,
-                            'url': product_url,
-                            'source': 'amazon',
-                        })
-                    except Exception as e:
-                        print(f"Amazon API error: {e}")
-                        continue
+                # Serper returns a clean 'shopping' array
+                for item in data.get('shopping', [])[:8]:
+                    results.append({
+                        "title": item.get('title'),
+                        "price": item.get('price'),
+                        "img_url": item.get('imageUrl'),
+                        "url": item.get('link'),
+                        "source": item.get('source', 'google_shopping')
+                    })
                 
-                self.saveToCache(query, "amazon", results)
+                self.saveToCache(query, "google_shopping", results)
                 return results
+            else:
+                print(f"DEBUG: Serper API Error {response.status_code}")
         except Exception as e:
-            print(f"Amazon API error: {e}")
-            return []
+            print(f"DEBUG: Serper logic crash: {e}")
         
         return []
-    
     def searchAllSources(self, query: str):
-        alreadySeen = set()
         uniqueResults = []
         try:
-            resultList = self.searchAmazon(query)
+            # CHANGE: Call searchGoogleShopping instead of searchAmazon
+            resultList = self.searchGoogleShopping(query)
+            
+            seen_titles = set()
             for result in resultList:
-                if result['url'] not in alreadySeen:
-                    alreadySeen.add(result['url'])
+                if result['title'] not in seen_titles:
+                    seen_titles.add(result['title'])
                     uniqueResults.append(result)
-                    print(f"Found in Amazon: {result['title']}")
             return uniqueResults
-        
         except Exception as e:
-            print(f"Error occurred while searching all sources: {e}")
+            print(f"Error in searchAllSources: {e}")
             return []
 
     def search(self, query: str):
+        # This now points to searchAllSources -> searchGoogleShopping
         return self.searchAllSources(query)
-    

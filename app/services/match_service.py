@@ -14,13 +14,15 @@ def scoreTitle(kitItem, searchItem):
     specsFound = 0
 
     similarity = difflib.SequenceMatcher(None, normalizedKitName, normalizedSearchName).ratio()
-    if similarity < 0.60:
+    if similarity < 0.30:
         return(0, [])
 
     for spec in kitSpecs:
         normalizedSpecs = normalizeString(spec)
         if (normalizedSpecs in normalizedSearchName):
             specsFound += 1
+    if normalizedKitName in normalizedSearchName:
+        return (0.85, ["Direct Keyword Match"])
     if similarity > 0.85 and specsFound > 0:
         return (0.90, ["High Title Similarity with Specs Found"])
     elif similarity > 0.80 and specsFound >= 1:

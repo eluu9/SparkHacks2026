@@ -83,8 +83,8 @@
             const data = await response.json();
 
             if (data.status === 'success') {
-                window.location.href = '/';
-            } else {
+                window.location.href = '/dashboard'; // Redirect to the authenticated space
+            }else {
                 throw new Error(data.error || "Backend session failed");
             }
 

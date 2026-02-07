@@ -38,41 +38,27 @@ class LocalLLMProvider:
                 else:
                     raise
 
-    def _call_groq(self, system_prompt, user_prompt, schema):
+    def _call_groq(self, system_prompt, user_prompt, schema=None):
+        # Everything from here down must be indented by 4 spaces (1 tab)
         api_key = os.getenv("GROQ_API_KEY")
         if not api_key:
-            raise ValueError("GROQ_API_KEY environment variable not set")
+            raise ValueError("GROQ_API_KEY not set")
 
         client = Groq(api_key=api_key)
         
-        messages = [
-            {"role": "system", "content": str(system_prompt)},
-            {"role": "user", "content": str(user_prompt)}
-        ]
+        model_id = config.get("GroqModelName", "llama-3.3-70b-versatile")
         
         response = client.chat.completions.create(
-            model=config.get("GroqModelName"),
-            messages=messages,
-            temperature=0.3, # adjusted for a little more "creativity" -> answers were sometimes the exact same
+            model=model_id,
+            messages=[
+                {"role": "system", "content": str(system_prompt)},
+                {"role": "user", "content": str(user_prompt)}
+            ],
+            temperature=0.2,
             response_format={"type": "json_object"}
         )
 
         return response.choices[0].message.content
-
-    def _call_local(self, system_prompt, user_prompt, schema):
-        body = {
-            "model": config.get("LocalModelName"),
-            "messages": [
-                {"role": "system", "content": str(system_prompt)},
-                {"role": "user", "content": str(user_prompt)},
-            ],
-            "stream": False,
-            "format": schema if schema is not None else "json",
-        }
-
-        resp = requests.post(config.get("LocalModelUrl"), json=body, timeout=240)
-        resp.raise_for_status()
-        return resp.json().get("message", {}).get("content", "")
 
 
 def validate_response(response, schema):

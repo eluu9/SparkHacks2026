@@ -1,20 +1,39 @@
-from flask import Blueprint, request, jsonify
-from flask_login import current_user, login_required
-from app.extensions import mongo
 import datetime
+from flask import Blueprint, request, jsonify
+from flask_login import login_required, current_user
+from app.extensions import mongo
+from app.services.orchestrator import run_lab_pipeline
 
-# 1. DEFINE the Blueprint FIRST
 bp = Blueprint('kit', __name__, url_prefix='/api/kit')
 
-# 2. Now you can use @bp.route
 @bp.route('/generate', methods=['POST'])
 @login_required
-def generate_kit():
-    # ... your existing logic ...
-    return jsonify({"status": "success"})
+def handle_request():
+    data = request.json
+    user_input = data.get('style')
+    
+    if not user_input:
+        return jsonify({"error": "No input provided"}), 400
+
+    # Run the full agentic pipeline
+    final_output = run_lab_pipeline(user_input)
+    
+    # Save the interaction to the DB if a kit was built
+    if final_output.get("type") == "final_kit":
+        mongo.db.kits.insert_one({
+            "user_id": current_user.id,
+            "kit_name": final_output.get("kit_title", "Custom Kit"),
+            "created_at": datetime.datetime.utcnow()
+        })
+        
+    return jsonify(final_output)
 
 @bp.route('/history', methods=['GET'])
 @login_required
 def get_history():
-    # ... your existing logic ...
-    return jsonify([])
+    # Fetch kits for the logged-in user
+    user_kits = mongo.db.kits.find({"user_id": current_user.id}).sort("created_at", -1)
+    return jsonify([{
+        "kit_name": k["kit_name"], 
+        "total_price": k.get("total_price", "N/A") 
+    } for k in user_kits])

@@ -44,6 +44,7 @@ def session_login():
 @bp.route("/logout")
 @login_required
 def logout():
-    session.pop("is_secure_lab", None)
     logout_user()
     return redirect(url_for("auth.login_page"))
+    session.clear()
+    return redirect(url_for('auth.login_page'))

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login with Google</h1>
+    <button id="login-btn">Sign in with Google</button>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyCrDraVHDBhnQNFMq4JkqNffCQuA4O9FpI",
+        authDomain: "sparkhacks-b2985.firebaseapp.com",
+        projectId: "sparkhacks-b2985",
+        storageBucket: "sparkhacks-b2985.firebasestorage.app",
+        messagingSenderId: "399492923349",
+        appId: "1:399492923349:web:be15e8843340026c70075c",
+        measurementId: "G-09JS9YQS93"
+    };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+
+      document.getElementById('login-btn').addEventListener('click', () => {
+        signInWithPopup(auth, provider).then((result) => {
+          result.user.getIdToken().then((idToken) => {
+            fetch('/auth/session-login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ idToken: idToken })
+            }).then(res => res.json()).then(data => {
+                if(data.status === 'success') {
+                    window.location.href = '/';
+                }
+            });
+          });
+        });
+      });
+    </script>
+</body>
+</html>

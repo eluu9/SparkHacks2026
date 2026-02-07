@@ -111,13 +111,18 @@
             </a>
 
             <div class="d-flex align-items-center">
-                {% if current_user.is_authenticated and request.endpoint == 'index' %}
-                    <div class="badge bg-dark rounded-pill px-3 py-2 fw-normal">
-                        <i class="bi bi-person-circle me-1"></i> 
-                        {{ current_user.name.split(' ')[0] }}'s Space
-                    </div>
-                {% endif %}
-            </div>
+    {% if current_user.is_authenticated %}
+        <span class="text-muted me-3 d-none d-md-block">
+            {{ current_user.name.split(' ')[0] }}
+        </span>
+        
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    {% else %}
+        <a href="{{ url_for('auth.login_page') }}" class="btn btn-primary btn-sm">Login</a>
+    {% endif %}
+</div>
         </div>
     </nav>
 

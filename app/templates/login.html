@@ -31,54 +31,51 @@
 
 {% block scripts %}
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    
-    console.log("Lab Auth Script Loaded"); // Verify this in F12 console
+    import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-    const firebaseConfig = {
-    // DOUBLE CHECK THIS KEY:
-        apiKey: "AIzaSyCrDraVHDBhnQNFMq4JkqNffCQuA4O9FpI", 
-        authDomain: "sparkhacks-b2985.firebaseapp.com",
-        projectId: "sparkhacks-b2985",
-        storageBucket: "sparkhacks-b2985.firebasestorage.app",
-        messagingSenderId: "399492923349",
-        appId: "1:399492923349:web:be15e8843340026c70075c",
-        measurementId: "G-09JS9YQS93"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const provider = new GoogleAuthProvider();
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
 
-    const loginBtn = document.getElementById('google-signin-trigger');
-    
-    if (loginBtn) {
-        console.log("Login button found, attaching listener...");
-        loginBtn.addEventListener('click', async () => {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const idToken = await result.user.getIdToken();
-                
-                // Perform the sync
-                const response = await fetch('/auth/session-login', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ idToken: idToken })
-                });
+// 1. Check if we are returning from a redirect
+getRedirectResult(auth)
+    .then(async (result) => {
+        if (result) {
+            console.log("Redirect successful, syncing session...");
+            const idToken = await result.user.getIdToken();
+            await syncSession(idToken); // Helper function (see below)
+        }
+    })
+    .catch((error) => {
+        console.error("Redirect Auth Error:", error);
+    });
 
-                const data = await response.json();
-                if (data.status === 'success') {
-                    window.location.href = '/dashboard'; // Match your main.py route
-                } else {
-                    alert("Auth failed: " + data.error);
-                }
-            } catch (error) {
-                console.error("Firebase Error:", error.code);
-                alert("Firebase Error: " + error.message);
-            }
+// 2. Button Click triggers Redirect instead of Popup
+const loginBtn = document.getElementById('google-signin-trigger');
+if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+        console.log("Starting redirect login...");
+        signInWithRedirect(auth, provider);
+    });
+}
+
+// 3. The Sync Logic (Extract this to reuse)
+async function syncSession(idToken) {
+    try {
+        const response = await fetch('/auth/session-login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ idToken: idToken })
         });
-    } else {
-        console.error("CRITICAL: Login button 'google-signin-trigger' NOT found in DOM!");
+        
+        const data = await response.json();
+        if (data.status === 'success') {
+            window.location.href = '/';
+        } else {
+            alert("Backend session failed: " + data.error);
+        }
+    } catch (e) {
+        console.error("Sync error:", e);
     }
+}
 </script>
 {% endblock %}

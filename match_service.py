@@ -52,5 +52,27 @@ def scoreTier4(kitItem, searchItem):
     normalizedSearchName = normalizeBrand(searchName)
     return (difflib.SequenceMatcher(None, normalizedKitName, normalizedSearchName).ratio(), ["No Exact Name Match"])
 
+def calculateConfidence(kitItem, searchItem):
+    confidence = 0
+    reason = []
 
+    confidence, reason = scoreTier1(kitItem, searchItem)
+    if confidence > 0:
+        return confidence, reason
+    confidence, reason = scoreTier2(kitItem, searchItem)
+    if confidence > 0:
+        return confidence, reason
+    confidence, reason = scoreTier3(kitItem, searchItem)
+    if confidence > 0:
+        return confidence, reason
+    confidence, reason = scoreTier4(kitItem, searchItem)
+    return confidence, reason
 
+def rankCandidates(kitItem, searchItems):
+    ranked = []
+
+    for searchItem in searchItems:
+        confidence, reason = calculateConfidence(kitItem, searchItem)
+        ranked.append({"Search Item": searchItem, "Confidence": confidence, "Reason": reason})
+    ranked.sort(key=lambda x: x["Confidence"], reverse=True)
+    return ranked

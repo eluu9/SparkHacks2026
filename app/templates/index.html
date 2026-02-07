@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid p-0" style="height: calc(100vh - 56px);">
+    <div class="row h-100 g-0">
+        
+        <div class="col-md-3 bg-white border-end d-none d-md-flex flex-column" style="height: 100%;">
+            <div class="p-4">
+                <h6 class="text-uppercase text-muted fw-bold small mb-4">Recent Chats</h6>
+                <div class="list-group list-group-flush gap-2">
+                    <button class="list-group-item list-group-item-action border-0 rounded-3 active bg-light text-dark fw-bold">
+                        <i class="bi bi-plus-lg me-2"></i> New Shopping Kit
+                    </button>
+                    <button class="list-group-item list-group-item-action border-0 rounded-3 text-muted">Streetwear $200</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9 d-flex flex-column h-100">
+            <div id="chat-display" class="flex-grow-1 p-4 px-lg-5" style="overflow-y: auto;">
+                <div class="d-flex mb-4 chat-bubble-anim">
+                    <div class="ai-bubble p-3" style="max-width: 70%;">
+                        Hi Taha! I'm your AI stylist. Tell me your budget and vibe, and I'll build a kit for you.
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-transparent">
+                <div class="mx-auto" style="max-width: 800px;">
+                    <form id="chat-form" class="bg-white shadow-sm rounded-pill p-2 d-flex gap-2 border">
+                        <input type="text" id="user-input" class="form-control border-0 bg-transparent px-4 shadow-none" placeholder="Describe your outfit..." required>
+                        <button type="submit" class="btn btn-dark rounded-pill px-4">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

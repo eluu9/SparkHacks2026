@@ -1,51 +1,67 @@
-from normalization import *
+"""Score and rank search results against kit items."""
+
 import difflib
 
-def scoreTitle(kitItem, searchItem):
-    kitName = kitItem['name']
-    kitSpecs = kitItem['specs_to_search']
-    searchName = searchItem['title']
+from normalization import normalize_string
 
-    if not kitName or not searchName:
-        return (0, [])
-    
-    normalizedKitName = normalizeString(kitName)
-    normalizedSearchName = normalizeString(searchName)
-    specsFound = 0
 
-    similarity = difflib.SequenceMatcher(None, normalizedKitName, normalizedSearchName).ratio()
+def score_title(kit_item, search_item):
+    """Compare kit item name to search result title using fuzzy matching."""
+    kit_name = kit_item.get("name")
+    kit_specs = kit_item.get("specs_to_search", [])
+    search_name = search_item.get("title")
+
+    if not kit_name or not search_name:
+        return 0, []
+
+    normalized_kit_name = normalize_string(kit_name)
+    normalized_search_name = normalize_string(search_name)
+    specs_found = 0
+
+    similarity = difflib.SequenceMatcher(
+        None, normalized_kit_name, normalized_search_name
+    ).ratio()
+
     if similarity < 0.30:
-        return(0, [])
+        return 0, []
 
-    for spec in kitSpecs:
-        normalizedSpecs = normalizeString(spec)
-        if (normalizedSpecs in normalizedSearchName):
-            specsFound += 1
-    if normalizedKitName in normalizedSearchName:
-        return (0.85, ["Direct Keyword Match"])
-    if similarity > 0.85 and specsFound > 0:
-        return (0.90, ["High Title Similarity with Specs Found"])
-    elif similarity > 0.80 and specsFound >= 1:
-        return (0.75, ["Medium Title Similarity with Specs Found"])
-    elif similarity > 0.75:
-        return (0.60, ["Fair Title Similarity"])
-    elif similarity > 0.70:
-        return (0.40, ["Low Title Similarity"])
-    return (0, [])
+    for spec in kit_specs:
+        if normalize_string(spec) in normalized_search_name:
+            specs_found += 1
 
-def calculateConfidence(kitItem, searchItem):
-    confidence = 0
-    reason = []
+    # Direct substring match is a strong signal
+    if normalized_kit_name in normalized_search_name:
+        return 0.85, ["Direct Keyword Match"]
+    if similarity > 0.85 and specs_found > 0:
+        return 0.90, ["High Title Similarity with Specs Found"]
+    if similarity > 0.80 and specs_found >= 1:
+        return 0.75, ["Medium Title Similarity with Specs Found"]
+    if similarity > 0.75:
+        return 0.60, ["Fair Title Similarity"]
+    if similarity > 0.70:
+        return 0.40, ["Low Title Similarity"]
+    return 0, []
 
-    confidence, reason = scoreTitle(kitItem, searchItem)
-    return confidence, reason
 
-def rankCandidates(kitItem, searchItems):
+def calculate_confidence(kit_item, search_item):
+    """Wrapper that returns a confidence score and reasoning list."""
+    return score_title(kit_item, search_item)
+
+
+def rank_candidates(kit_item, search_items):
+    """Return search results sorted by descending confidence."""
     ranked = []
 
-    for searchItem in searchItems:
-        confidence, reason = calculateConfidence(kitItem, searchItem)
+    for search_item in search_items:
+        confidence, reason = calculate_confidence(kit_item, search_item)
         if confidence > 0:
-            ranked.append({"Search Item": searchItem, "Confidence": confidence, "Reason": reason, "Source": searchItem.get("source", "unknown"), "URL": searchItem.get("url", "")})
-    ranked.sort(key=lambda x: x["Confidence"], reverse=True)
+            ranked.append({
+                "search_item": search_item,
+                "confidence": confidence,
+                "reason": reason,
+                "source": search_item.get("source", "unknown"),
+                "url": search_item.get("url", ""),
+            })
+
+    ranked.sort(key=lambda x: x["confidence"], reverse=True)
     return ranked

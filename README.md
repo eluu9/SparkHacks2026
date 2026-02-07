@@ -1,8 +1,8 @@
-# LAB - AI Shopping Kit Builder
+# KartWise - AI Shopping Chatbot
 
-LAB is a full-stack web application that turns natural language prompts into curated shopping kits. Describe a vibe, style, or project need (e.g. *"$150 vintage 90s outfit"*) and LAB runs an agentic pipeline that generates a structured product kit, searches for real products, ranks matches, and returns a visual grid of buyable items with prices and links.
+KartWise is an AI-powered shopping assistant that generates personalized product kits based on user prompts. It uses a multi-step agentic pipeline to clarify requests, create structured shopping kits, and find products.
 
-Built for **SparkHacks 2026** at UIC.
+This is a hackathon submission for **SparkHacks 2026** at UIC.
 
 ## How It Works
 
@@ -147,11 +147,3 @@ This project includes a Dockerfile and is ready to deploy on [Aedify.ai](https:/
 The app will build and be accessible at the URL Aedify assigns. No `PORT` configuration needed -- the Dockerfile reads it automatically.
 
 > **Note:** For Firebase credentials, copy the entire contents of `firebase-key.json` and paste it as the value of `FIREBASE_CREDENTIALS_JSON`. The container writes it to a file at startup.
-
-## Support
-
-Open an issue on the repository for bugs or feature requests.
-
-## Contributors
-
-Built by the LAB team at SparkHacks 2026.

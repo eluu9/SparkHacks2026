@@ -1,176 +1,131 @@
-/**
- * Main chat UI controller — handles form submission, message rendering,
- * kit display, and sidebar history.
- */
-
 let chatHistory = [];
 
-document.addEventListener("DOMContentLoaded", () => {
-    const chatForm = document.getElementById("chat-form");
-    const input = document.getElementById("user-input");
-    const display = document.getElementById("chat-display");
+document.addEventListener('DOMContentLoaded', () => {
+    const chatForm = document.getElementById('chat-form');
+    const input = document.getElementById('user-input');
+    const display = document.getElementById('chat-display');
+    const loadingBubble = document.getElementById('loading-bubble');
 
-    refreshSidebar();
+    if(chatForm) {
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const query = input.value.trim();
+            if (!query) return;
 
-    chatForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
+            if (query.toLowerCase().includes("build") || query.toLowerCase().includes("kit")) {
+                chatHistory = []; 
+            }
 
-        const query = input.value.trim();
-        if (!query) return;
+            addMessage('user', query);
+            chatHistory.push({ role: 'user', content: query });
+            input.value = '';
 
-        // Reset history when the user starts a new intent
-        const lowerQuery = query.toLowerCase();
-        if (lowerQuery.includes("build") || lowerQuery.includes("find") || lowerQuery.includes("kit")) {
-            chatHistory = [];
-        }
+            if(loadingBubble) {
+                loadingBubble.classList.remove('d-none');
+                scrollToBottom();
+            }
 
-        addMessage("user", query);
-        chatHistory.push({ role: "user", content: query });
-        input.value = "";
+            try {
+                const res = await fetch('/api/kit/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ style: query, history: chatHistory })
+                });
 
-        try {
-            const response = await fetch("/api/kit/generate", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    style: query,
-                    history: chatHistory,
-                }),
-            });
+                const payload = await res.json();
+                
+                // Hide Loading
+                if(loadingBubble) loadingBubble.classList.add('d-none');
+                if (!res.ok) throw new Error(payload.error || 'API failed');
 
-            if (!response.ok) throw new Error("API request failed");
-            const payload = await response.json();
-
-            // Brief delay so the transition feels natural
-            setTimeout(() => {
-                if (payload.type === "questions") {
+                if (payload.type === 'questions') {
                     handleClarification(payload.data);
-                    chatHistory.push({ role: "ai", content: payload.data.join(" ") });
+                    chatHistory.push({ role: 'ai', content: payload.data.join(' ') });
                 } else {
-                    addMessage("ai", payload.summary || `I've assembled your ${payload.kit_title || "Kit"}:`);
+                    addMessage('ai', payload.summary || `I've assembled your ${payload.kit_title}:`);
                     renderFullKit(payload);
-                    chatHistory = [];
+                    chatHistory = []; 
                 }
-                refreshSidebar();
-            }, 750);
-        } catch (error) {
-            console.error("Pipeline Error:", error);
-            addMessage("ai", "Lab connection lost. Try refreshing?");
-        }
-    });
 
-    /** Append a chat bubble to the display area. */
-    function addMessage(sender, msg) {
-        const row = document.createElement("div");
-        row.className = `d-flex mb-4 pop-animation ${
-            sender === "user" ? "justify-content-end" : "justify-content-start"
-        }`;
-
-        const bubble = document.createElement("div");
-        bubble.className = `p-3 shadow-sm ${sender === "user" ? "msg-user" : "msg-ai"}`;
-        bubble.style.maxWidth = "75%";
-        bubble.innerHTML = msg;
-
-        row.appendChild(bubble);
-        display.appendChild(row);
-        display.scrollTo({ top: display.scrollHeight, behavior: "smooth" });
-    }
-
-    /** Show follow-up questions from the clarification gate. */
-    function handleClarification(questions) {
-        let html = "I need a few more details:<ul>";
-        questions.forEach((question) => {
-            html += `<li>${question}</li>`;
+            } catch (err) {
+                console.error(err);
+                if(loadingBubble) loadingBubble.classList.add('d-none');
+                addMessage('ai', "⚠️ Connection lost. Please try again.");
+            }
         });
-        addMessage("ai", html + "</ul>");
     }
 
-    /** Render every section of a completed kit as product-tile grids. */
+    function scrollToBottom() {
+        display.scrollTo({ top: display.scrollHeight, behavior: 'smooth' });
+    }
+
+    function addMessage(who, msg) {
+        const row = document.createElement('div');
+        row.className = `d-flex mb-4 pop-animation ${who === 'user' ? 'justify-content-end' : 'justify-content-start'}`;
+        const bubble = document.createElement('div');
+        bubble.className = `p-3 shadow-sm ${who === 'user' ? 'msg-user' : 'msg-ai'}`;
+        if(who === 'user') bubble.style.maxWidth = '75%'; else bubble.style.maxWidth = '85%';
+        bubble.innerHTML = msg; 
+        
+        if(loadingBubble && display.contains(loadingBubble)) {
+            display.insertBefore(row, loadingBubble);
+        } else {
+            display.appendChild(row);
+        }
+        scrollToBottom();
+    }
+
+    function handleClarification(questions) {
+        let html = "<p>I need a few details:</p><ul>";
+        questions.forEach(q => html += `<li>${q}</li>`);
+        html += "</ul>";
+        addMessage('ai', html);
+    }
+
     function renderFullKit(data) {
         if (!data.sections) return;
+        const kitContainer = document.createElement('div');
+        
+        data.sections.forEach(section => {
+            const header = document.createElement('div');
+            header.innerHTML = `<div class="mt-4 mb-3 pb-1 border-bottom"><h6 class="text-uppercase fw-bold small">${section.name}</h6></div>`;
+            kitContainer.appendChild(header);
 
-        data.sections.forEach((section) => {
-            const header = document.createElement("div");
-            header.innerHTML = `
-                <div class="mt-4 mb-2">
-                    <h6 class="text-uppercase fw-bold text-muted small px-2">${section.name}</h6>
-                </div>`;
-            display.appendChild(header);
-
-            const grid = document.createElement("div");
-            grid.innerHTML = `
-                <div class="card border-0 shadow-sm mb-4 pop-animation ai-kit-grid" style="max-width: 90%;">
-                    <div class="card-body p-4">
-                        <div class="row g-3">
-                            ${section.items.map((item) => renderItemTile(item)).join("")}
+            const grid = document.createElement('div');
+            grid.className = 'row g-3 mb-4';
+            grid.innerHTML = section.items.map(i => {
+                const price = i.price && !String(i.price).includes('$') ? `$${i.price}` : (i.price || 'Check Price');
+                return `
+                <div class="col-6 col-md-4">
+                    <div class="card h-100 border shadow-sm">
+                        <div class="card-img-top p-3 d-flex align-items-center justify-content-center" style="height: 140px;">
+                            <img src="${i.img_url || 'https://via.placeholder.com/150'}" class="img-fluid" style="max-height: 100%; object-fit: contain;">
+                        </div>
+                        <div class="card-body p-3">
+                            <h6 class="card-title text-truncate fw-bold small">${i.name}</h6>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="fw-bold text-primary small">${price}</span>
+                                <a href="${i.buy_url || '#'}" target="_blank" class="btn btn-sm btn-outline-dark rounded-circle"><i class="bi bi-arrow-up-right"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>`;
-            display.appendChild(grid);
+            }).join('');
+            kitContainer.appendChild(grid);
         });
 
-        display.scrollTo({ top: display.scrollHeight, behavior: "smooth" });
-    }
+        const row = document.createElement('div');
+        row.className = 'd-flex mb-4 pop-animation justify-content-start w-100';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'w-100 px-2'; 
+        wrapper.appendChild(kitContainer);
+        row.appendChild(wrapper);
 
-    /** Build the HTML for a single product tile inside a kit grid. */
-    function renderItemTile(item) {
-        const imgSrc = item.img_url || item.imageUrl || "https://via.placeholder.com/150?text=No+Image";
-
-        let priceDisplay = item.price || "Check Price";
-        if (priceDisplay !== "Check Price" && !priceDisplay.includes("$")) {
-            priceDisplay = `$${priceDisplay}`;
+        if(loadingBubble && display.contains(loadingBubble)) {
+            display.insertBefore(row, loadingBubble);
+        } else {
+            display.appendChild(row);
         }
-
-        const url = item.buy_url || item.link || "#";
-
-        return `
-            <div class="col-6 col-md-4 mb-4">
-                <div class="p-3 border rounded-4 bg-white h-100 d-flex flex-column shadow-sm transition-hover">
-                    <div class="text-center mb-3" style="height: 120px; overflow: hidden;">
-                        <img src="${imgSrc}" class="img-fluid h-100" style="object-fit: contain;"
-                             onerror="this.src='https://via.placeholder.com/150?text=Product+Image'">
-                    </div>
-
-                    <span class="fw-bold smallest d-block mb-1 text-truncate" title="${item.name}">
-                        ${item.name}
-                    </span>
-                    <p class="text-muted smallest mb-2 text-truncate-2" style="font-size: 0.65rem;">
-                        ${item.description || ""}
-                    </p>
-
-                    <div class="mt-auto d-flex justify-content-between align-items-center pt-2 border-top">
-                        <span class="fw-bold small text-primary">${priceDisplay}</span>
-                        <a href="${url}" target="_blank" class="btn btn-sm btn-dark rounded-circle shadow-sm">
-                            <i class="bi bi-arrow-up-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>`;
-    }
-
-    /** Reload the left-hand sidebar with the user's kit history. */
-    async function refreshSidebar() {
-        const response = await fetch("/api/kit/history");
-        const data = await response.json();
-        const list = document.getElementById("chat-sidebar-list");
-
-        list.innerHTML = data.map((kit) => `
-            <button class="list-group-item list-group-item-action border-0 rounded-3 mb-1 py-2 text-truncate history-item"
-                    data-kit-id="${kit._id}">
-                <i class="bi bi-clock-history me-2"></i> ${kit.kit_name || "Untitled Project"}
-            </button>
-        `).join("");
-
-        document.querySelectorAll(".history-item").forEach((button) => {
-            button.addEventListener("click", async () => {
-                const kitId = button.getAttribute("data-kit-id");
-                const res = await fetch(`/api/kit/${kitId}`);
-                const kitData = await res.json();
-
-                const chatDisplay = document.getElementById("chat-display");
-                chatDisplay.innerHTML = "";
-                renderFullKit(kitData);
-            });
-        });
+        scrollToBottom();
     }
 });

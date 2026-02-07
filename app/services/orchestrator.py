@@ -1,7 +1,7 @@
 import datetime
 from app.services.planner_service import gate_clarification
 from app.services.kit_service import generate_kit
-from app.services.query_service import build_query_for_item # Add this!
+from app.services.query_service import build_query_for_item
 from app.services.search_service import SearchService
 from app.services.match_service import rankCandidates
 from app.extensions import mongo
@@ -19,7 +19,6 @@ def run_lab_pipeline(user_input, history=None):
     
     for section in kit_json.get("sections", []):
         for item in section.get("items", []):
-            # Now this will work because we imported it
             query_data = build_query_for_item(item)
             
             raw_results = searcher.search(query_data["clean_query"])

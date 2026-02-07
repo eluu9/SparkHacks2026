@@ -6,7 +6,7 @@ def generate_item_queries(kit_json):
             query = build_query_for_item(item)
             queries.append(query)
     
-    return queries
+    return {"items": queries}
 
 
 def build_query_for_item(item):
